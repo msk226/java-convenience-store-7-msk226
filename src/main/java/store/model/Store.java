@@ -12,19 +12,16 @@ public class Store {
         this.inventory = inventory;
     }
 
-    public List<Payment> processOrder(List<Order> orders){
-        List<Payment> payments = new ArrayList<>();
+    public List<Order> processOrder(List<Order> orders){
+        List<Order> successOrders = new ArrayList<>();
         for (Order order : orders){
             Product product = order.getProduct();
             Integer quantity = order.getQuantity();
-
             checkExistProduct(product);
-
             inventory.reduceStock(product, quantity);
-            Payment payment = new Payment(order);
-            payments.add(payment);
+            successOrders.add(order);
         }
-        return payments;
+        return successOrders;
     }
 
     private void checkExistProduct(Product product) {
