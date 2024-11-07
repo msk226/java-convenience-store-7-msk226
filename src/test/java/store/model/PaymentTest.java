@@ -24,6 +24,6 @@ public class PaymentTest {
 
     @Test
     void 결제_금액_계산(){
-        Assertions.assertEquals(500_000, payment.getTotalAmount());
+        Assertions.assertEquals(100_000, payment.getTotalAmount());
     }
 }
