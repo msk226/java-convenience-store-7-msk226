@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class OrderTest extends NsTest {
+public class OrderTest {
 
     private final Integer ORDER_QUANTITY = 10;
     private Promotion promotion;
@@ -24,7 +24,7 @@ public class OrderTest extends NsTest {
     void 주문은_필수_속성을_가져야_한다(){
         Order order = new Order(product, ORDER_QUANTITY);
 
-        assertEquals(order.getProduct().getName(), NAME);
+        assertEquals(order.getProduct().getName(), "사이다");
         assertEquals(order.getQuantity(), ORDER_QUANTITY);
     }
 
@@ -35,10 +35,4 @@ public class OrderTest extends NsTest {
                 () -> new Order(product, badOrderQuantity));
     }
 
-
-
-    @Override
-    protected void runMain() {
-
-    }
 }

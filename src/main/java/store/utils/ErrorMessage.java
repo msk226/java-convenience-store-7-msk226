@@ -9,6 +9,8 @@ public class ErrorMessage {
 
     public static final String NOT_ENOUGH_STOCK = "[ERROR] 재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.";
 
+    public static final String ORDER_QUANTITY_GREATER_THAN_ZERO = "[ERROR] 주문 수량은 항상 0보다 커야 합니다.";
+
 
 
 }
