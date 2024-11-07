@@ -2,6 +2,7 @@ package store.model;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import store.utils.message.ErrorMessage;
 
 public class Inventory {
@@ -11,8 +12,8 @@ public class Inventory {
         return stock.containsKey(product);
     }
 
-    public int getTotalProductSize(){
-        return stock.size();
+    public Set<Product> getProducts(){
+        return stock.keySet();
     }
     public void addStock(Product product, Integer quantity){
         stock.put(product, stock.getOrDefault(product, 0) + quantity);
