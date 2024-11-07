@@ -6,7 +6,7 @@ import camp.nextstep.edu.missionutils.test.NsTest;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
-public class PromotionTest extends NsTest {
+public class PromotionTest {
 
     private final String NAME = "MD추천상품";
     private final Integer BUY_AMOUNT = 1;
@@ -47,8 +47,4 @@ public class PromotionTest extends NsTest {
                 () -> new Promotion(NAME, BUY_AMOUNT, GET_AMOUNT, START_DATE, LocalDate.MIN));
     }
 
-    @Override
-    protected void runMain() {
-
-    }
 }
