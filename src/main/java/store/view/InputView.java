@@ -9,7 +9,7 @@ import java.util.List;
 
 public class InputView {
 
-    public static String inputYesOrNo(String message){
+    public static String input(String message){
         System.out.println(message);
         return Console.readLine();
     }
