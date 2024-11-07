@@ -2,7 +2,7 @@ package store.model;
 
 import java.util.HashMap;
 import java.util.Map;
-import store.utils.ErrorMessage;
+import store.utils.message.ErrorMessage;
 
 public class Inventory {
     private final Map<Product, Integer> stock = new HashMap<>();

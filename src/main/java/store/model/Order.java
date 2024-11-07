@@ -1,6 +1,6 @@
 package store.model;
 
-import static store.utils.ErrorMessage.ORDER_QUANTITY_GREATER_THAN_ZERO;
+import static store.utils.message.ErrorMessage.ORDER_QUANTITY_GREATER_THAN_ZERO;
 
 public class Order {
 

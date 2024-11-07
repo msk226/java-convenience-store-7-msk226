@@ -1,9 +1,9 @@
 package store.model;
 
 
-import static store.utils.ErrorMessage.INVALID_PROMOTION_DATE;
-import static store.utils.ErrorMessage.PROMOTION_BUY_AMOUNT_GREATER_THAN_ZERO;
-import static store.utils.ErrorMessage.PROMOTION_GET_AMOUNT_GREATER_THAN_ZERO;
+import static store.utils.message.ErrorMessage.INVALID_PROMOTION_DATE;
+import static store.utils.message.ErrorMessage.PROMOTION_BUY_AMOUNT_GREATER_THAN_ZERO;
+import static store.utils.message.ErrorMessage.PROMOTION_GET_AMOUNT_GREATER_THAN_ZERO;
 
 import java.time.LocalDate;
 

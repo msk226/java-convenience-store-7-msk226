@@ -2,7 +2,7 @@ package store.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import store.utils.ErrorMessage;
+import store.utils.message.ErrorMessage;
 
 public class Store {
 
