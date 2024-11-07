@@ -11,7 +11,17 @@ public class Product {
         this.price = price;
         this.promotion = promotion;
     }
+    public String getName() {
+        return name;
+    }
 
+    public Integer getPrice() {
+        return price;
+    }
+
+    public Promotion getPromotion() {
+        return promotion;
+    }
     private void validatePrice(Integer price){
         if (price <= 0){
             throw new IllegalArgumentException("[ERROR] 상품의 가격은 항상 0보다 커야 합니다.");
