@@ -11,6 +11,8 @@ public class ErrorMessage {
 
     public static final String ORDER_QUANTITY_GREATER_THAN_ZERO = "[ERROR] 주문 수량은 항상 0보다 커야 합니다.";
 
+    public static final String NON_EXIST_PRODUCT = "[ERROR] 존재하지 않는 상품입니다. 다시 입력해 주세요.";
+
 
 
 }

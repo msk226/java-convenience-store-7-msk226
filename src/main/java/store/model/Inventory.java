@@ -7,6 +7,10 @@ import store.utils.ErrorMessage;
 public class Inventory {
     private final Map<Product, Integer> stock = new HashMap<>();
 
+    public boolean existsByProduct(Product product){
+        return stock.containsKey(product);
+    }
+
     public int getTotalProductSize(){
         return stock.size();
     }
