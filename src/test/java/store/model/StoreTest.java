@@ -1,6 +1,8 @@
 package store.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,14 +29,14 @@ public class StoreTest {
         Product invalidProduct = new Product("TEST", 10_000, promotion);
         Order order = new Order(invalidProduct, 100);;
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> store.processOrder(order));
+                () -> store.processOrder(new ArrayList<>(List.of(order))));
     }
 
     @Test
     void 재고_수량보다_많은_갯수의_주문은_처리할_수_없다(){
         Order order = new Order(product, 100);;
         Assertions.assertThrows(IllegalArgumentException.class,
-                () ->  store.processOrder(order));
+                () ->  store.processOrder(new ArrayList<>(List.of(order))));
     }
 
 
