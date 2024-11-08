@@ -17,7 +17,7 @@ public class Inventory {
 
             if (product.hasPromotion()){
                 addStock(promotionStock, product, quantity);
-                return;
+                continue;
             }
             addStock(standardStock, product, quantity);
         }
@@ -92,12 +92,16 @@ public class Inventory {
                 return product;
             }
         }
-        throw new IllegalArgumentException(ErrorMessage.NON_EXIST_PRODUCT);
+        return null;
     }
 
     private int getTotalStockCount(String productName) {
-        Product productInStandardStock = findProductByNameInStock(standardStock, productName);
         Product productInPromotionStock = findProductByNameInStock(promotionStock, productName);
+        Product productInStandardStock = findProductByNameInStock(standardStock, productName);
+
+        if (productInPromotionStock == null && productInStandardStock == null){
+            throw new IllegalArgumentException(ErrorMessage.NON_EXIST_PRODUCT);
+        }
 
         return standardStock.getOrDefault(productInStandardStock, 0) +
                 promotionStock.getOrDefault(productInPromotionStock, 0);
