@@ -15,7 +15,6 @@ public class Store {
         this.inventory = inventory;
     }
 
-
     public Map<Product, Integer> processOrder(List<Order> orders){
         inventory.checkOrderIsPossible(orders);
         return inventory.retrieveProductForOrder(orders);
@@ -25,8 +24,10 @@ public class Store {
         return product.getPromotion().checkEligibleFreeItems(quantity);
     }
 
-    //TODO 프로모션 상품 재고가 남아있지 않은 경우 -> 해결
-    //TODO 프로모션 적용이 가능한 상품에 대해 고객이 해당 수량만큼 가져오지 않았을 경우
+    public void getFreeItem(Product product, Integer quantity){
+         inventory.giveFreeItem(product, quantity);
+    }
+
     public int calculateTotalAmount(Map<Product, Integer> orderResult) {
         int totalAmount = 0;
         Set<Product> products = orderResult.keySet();
