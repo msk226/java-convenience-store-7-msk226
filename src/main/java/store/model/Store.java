@@ -1,7 +1,10 @@
 package store.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import store.utils.message.ErrorMessage;
 
 public class Store {
@@ -14,36 +17,40 @@ public class Store {
 
     //TODO 프로모션 상품 재고가 남아있지 않은 경우
     //TODO 프로모션 적용이 가능한 상품에 대해 고객이 해당 수량만큼 가져오지 않았을 경우
-    public int calculateTotalAmount(List<Order> orders) {
+    public int calculateTotalAmount(Map<Product, Integer> orderResult) {
         int totalAmount = 0;
-        for (Order order : orders){
-            Product product = getProductAtInventory(order);
-            totalAmount += order.getQuantity() * product.getPrice();
+        Set<Product> products = orderResult.keySet();
+        for (Product product : products){
+            totalAmount += product.getPrice() * orderResult.get(product);
         }
         return totalAmount;
     }
 
-    public int calculateDiscountAmount(List<Order> orders) {
+    public int calculateDiscountAmount(Map<Product, Integer> orderResult, LocalDate orderDate, boolean isGetFreeItem) {
         int totalDiscountAmount = 0;
-        for (Order order : orders){
-            Product product = getProductAtInventory(order);
+        Set<Product> products = orderResult.keySet();
+        for (Product product : products){
             Promotion promotion = product.getPromotion();
-
             if (promotion != null) {
-                totalDiscountAmount += promotion.calculateDiscount(order.getQuantity(), product.getPrice(), order.getOrderDate());
+                if ((promotion.checkEligibleFreeItems(orderResult.get(product)) != 0) && isGetFreeItem){
+                    //TODO 주문에 무료 상품 하나 추가
+                }
+
+                totalDiscountAmount += promotion.calculateDiscount(orderResult.get(product), product.getPrice(), orderDate);
             }
         }
         return totalDiscountAmount;
     }
-    public int calculateFinalAmount(List<Order> orders) {
-        return calculateTotalAmount(orders) - calculateDiscountAmount(orders);
+
+    public int calculateFinalAmount(Map<Product, Integer> orderResult, LocalDate orderDate) {
+        return calculateTotalAmount(orderResult) - calculateDiscountAmount(orderResult, orderDate);
     }
 
-    public List<Order> processOrder(List<Order> orders){
-        List<Order> successOrders = new ArrayList<>();
+    public Map<Product, Integer> processOrder(List<Order> orders){
         for (Order order : orders){
-            updateStock(order);
-            successOrders.add(order);
+            inventory.checkOrderIsPossible(order);
+
+            Map<Product, Integer> productForOrder = inventory.retrieveProductForOrder(orders);
         }
         return successOrders;
     }
@@ -51,27 +58,5 @@ public class Store {
 
     /* --------------------------------------------------------------------------------------------*/
 
-    private Product getProductAtInventory(Order order) {
-        return inventory.findByProductName(order.getProductName());
-    }
-
-
-    private void updateStock(Order order) {
-        Product product = getProduct(order);
-        Integer quantity = order.getQuantity();
-        inventory.reduceStock(product, quantity);
-    }
-
-    private Product getProduct(Order order) {
-        Product product = getProductAtInventory(order);
-        checkExistProduct(product);
-        return product;
-    }
-
-    private void checkExistProduct(Product product) {
-        if (!inventory.existsByProduct(product)){
-            throw new IllegalArgumentException(ErrorMessage.NON_EXIST_PRODUCT);
-        }
-    }
 
 }
