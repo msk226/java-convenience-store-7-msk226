@@ -1,15 +1,20 @@
 package store.controller;
 
 
+import static store.utils.message.InputMessage.*;
+
 import java.util.List;
 import java.util.Map;
+import store.converter.OrderConverter;
 import store.converter.ProductConverter;
 import store.converter.PromotionConverter;
 import store.model.Inventory;
+import store.model.Order;
 import store.model.Product;
 import store.model.Promotion;
 import store.model.Store;
 import store.service.StoreService;
+import store.utils.message.InputMessage;
 import store.view.InputView;
 import store.view.OutputView;
 
@@ -21,7 +26,7 @@ public class StoreController {
         this.storeService = storeService;
     }
 
-    public void openStore(){
+    public Store openStore(){
         OutputView.printWelcomeMessage();
 
         List<String> inputPromotions = InputView.inputData("src/main/resources/promotions.md");
@@ -29,10 +34,22 @@ public class StoreController {
 
         List<Promotion> promotions = PromotionConverter.convertToPromotion(inputPromotions);
         Map<Product, Integer> products = ProductConverter.convertToProduct(inputProducts, promotions);
-//
-        storeService.initializeStore(products);
 
+        Store store = storeService.initializeStore(products);
         OutputView.printProducts(products);
+
+        return store;
     }
+
+    public void getOrder(Store store){
+
+        String inputOrder = InputView.input(ORDER_MESSAGE);
+        List<Order> orders = OrderConverter.convertToOrder(inputOrder);
+        Map<Product, Integer> productIntegerMap = storeService.processOrder(orders, store);
+
+        System.out.println(productIntegerMap);
+
+    }
+
 
 }
