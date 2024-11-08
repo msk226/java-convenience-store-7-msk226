@@ -38,7 +38,9 @@ public class Inventory {
             int remainingQuantity = order.getQuantity();
 
             // 프로모션 재고에서 먼저 차감
-            remainingQuantity = processStock(order, orderResult, promotionStock, remainingQuantity);
+            if (findProductByNameInStock(promotionStock, order.getProductName()) != null){
+                remainingQuantity = processStock(order, orderResult, promotionStock, remainingQuantity);
+            }
 
             // 표준 재고에서 나머지 차감
             processOrderInStandardStock(order, remainingQuantity, orderResult);
@@ -47,8 +49,10 @@ public class Inventory {
         return orderResult;
     }
 
-    public void giveFreeItem(Product product, Integer quantity){
+    public Map<Product, Integer> giveFreeItem(Map<Product, Integer> orderResult, Product product, Integer quantity){
         reduceStock(promotionStock, product, quantity);
+        orderResult.put(product, orderResult.get(product) + 1);
+        return orderResult;
     }
 
 

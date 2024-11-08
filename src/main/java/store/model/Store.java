@@ -21,11 +21,14 @@ public class Store {
     }
 
     public boolean checkEligibleFreeItems(Product product, Integer quantity){
+        if (!product.hasPromotion()){
+            return false;
+        }
         return product.getPromotion().checkEligibleFreeItems(quantity);
     }
 
-    public void getFreeItem(Product product, Integer quantity){
-         inventory.giveFreeItem(product, quantity);
+    public Map<Product, Integer> getFreeItem(Map<Product, Integer> orderResult, Product product, Integer quantity){
+        return inventory.giveFreeItem(orderResult, product, quantity);
     }
 
     public int calculateTotalAmount(Map<Product, Integer> orderResult) {
