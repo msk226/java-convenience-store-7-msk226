@@ -24,8 +24,8 @@ public class Promotion {
         this.endDate = endDate;
     }
 
-    public int checkEligibleFreeItems(int quantity){
-        return quantity / (buyAmount + getAmount);
+    public boolean checkEligibleFreeItems(int quantity){
+        return quantity % (buyAmount + getAmount) == buyAmount;
     }
 
     public int calculateDiscount(int quantity, int unitPrice, LocalDate orderDate){

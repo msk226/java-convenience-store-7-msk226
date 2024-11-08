@@ -16,8 +16,8 @@ public class Inventory {
         }
     }
 
-    private void validateStockAvailability(int totalStockCount, Integer order) {
-        if (totalStockCount < order) {
+    private void validateStockAvailability(int totalStockCount, Integer orderQuantity) {
+        if (totalStockCount < orderQuantity) {
             throw new IllegalArgumentException(ErrorMessage.NOT_ENOUGH_STOCK);
         }
     }
@@ -34,6 +34,16 @@ public class Inventory {
             processOrderInStandardStock(order, remainingQuantity, orderResult);
         }
 
+        return orderResult;
+    }
+
+    public Map<Product, Integer> giveFreeItem(Map<Product, Integer> orderResult, Product product ,Integer quantity){
+        if (!orderResult.containsKey(product)) {
+            throw new IllegalArgumentException(ErrorMessage.NON_EXIST_PRODUCT);
+        }
+        reduceStock(promotionStock, product, quantity);
+
+        orderResult.put(product, quantity + orderResult.get(product));
         return orderResult;
     }
 
