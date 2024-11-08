@@ -21,6 +21,7 @@ import store.model.Promotion;
 import store.utils.message.ErrorMessage;
 
 public class PromotionConverter {
+
     public static List<Promotion> convertToPromotion(List<String> inputPromotions){
         List<Promotion> promotions = new ArrayList<>();
 
@@ -31,7 +32,6 @@ public class PromotionConverter {
         }
         return promotions;
     }
-
 
     private static Promotion createPromotion(String[] input) {
         String name = parseName(input);
