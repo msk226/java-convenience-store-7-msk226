@@ -32,10 +32,6 @@ public class OutputView {
         System.out.println(BLANK);
     }
 
-    public static void printFreePromotionItems(Product product, Integer quantity){
-        String message = String.format(FREE_PROMOTION_MESSAGE, product.getName(), quantity);
-        System.out.println(message);
-    }
 
     private static String getFormattedPrice(Integer price){
         DecimalFormat decimalFormat = new DecimalFormat("#,###");
