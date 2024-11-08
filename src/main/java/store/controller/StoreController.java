@@ -47,14 +47,23 @@ public class StoreController {
         List<Order> orders = OrderConverter.convertToOrder(inputOrder);
         Map<Product, Integer> productIntegerMap = storeService.processOrder(orders, store);
 
-        checkFreeItem(productIntegerMap, store);
+        Map<Product, Integer> orderResult = getFreeItem(productIntegerMap, store);
+
+        OutputView.printProducts(orderResult);
     }
 
-    private void checkFreeItem(Map<Product, Integer> orderResults, Store store){
+    private Map<Product, Integer> getFreeItem(Map<Product, Integer> orderResults, Store store){
         List<Product> eligibleFreeItems = storeService.checkEligibleFreeItems(orderResults, store);
 
         for (Product product : eligibleFreeItems){
-            OutputView.printFreePromotionItems(product, 1);
+            String message = String.format(PROMOTION_MESSAGE_TEMPLATE, product.getName(), 1);
+            String input = InputView.input(message);
+            if (!input.equals("Y")){
+                continue;
+            }
+            storeService.getFreeItem(orderResults, product, store);
         }
+        return orderResults;
     }
+    
 }
