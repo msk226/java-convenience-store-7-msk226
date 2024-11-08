@@ -6,31 +6,23 @@ import java.time.LocalDate;
 
 public class Order {
 
-    private final Product product;
+    private final String productName;
     private final Integer quantity;
     private final LocalDate orderDate;
 
-    public Order(Product product, Integer quantity){
+    public Order(String productName, Integer quantity){
         validateOrder(quantity);
-        this.product = product;
+        this.productName = productName;
         this.quantity = quantity;
         this.orderDate = LocalDate.now();
     }
-
-    public int getTotalAmount() {
-        return product.getPrice() * quantity;
-    }
-    public int getDiscountAmount(){
-        Promotion promotion = product.getPromotion();
-        if (promotion == null){
-            return 0;
-        }
-        return promotion.calculateDiscount(quantity, product.getPrice(), orderDate);
-    }
-    public Product getProduct() {
-        return product;
+    public String getProductName() {
+        return productName;
     }
 
+    public LocalDate getOrderDate() {
+        return orderDate;
+    }
     public Integer getQuantity() {
         return quantity;
     }

@@ -12,6 +12,16 @@ public class Inventory {
         return stock.containsKey(product);
     }
 
+    public Product findByProductName(String productName){
+        Set<Product> products = stock.keySet();
+        for (Product product : products){
+            if (product.getName().equals(productName)){
+                return product;
+            }
+        }
+        throw new IllegalArgumentException(ErrorMessage.NON_EXIST_PRODUCT);
+    }
+
     public Set<Product> getProducts(){
         return stock.keySet();
     }

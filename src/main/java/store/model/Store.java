@@ -12,10 +12,13 @@ public class Store {
         this.inventory = inventory;
     }
 
+    //TODO 프로모션 상품 재고가 남아있지 않은 경우
+    //TODO 프로모션 적용이 가능한 상품에 대해 고객이 해당 수량만큼 가져오지 않았을 경우
     public int calculateTotalAmount(List<Order> orders) {
         int totalAmount = 0;
         for (Order order : orders){
-            totalAmount += order.getTotalAmount();
+            Product product = getProductAtInventory(order);
+            totalAmount += order.getQuantity() * product.getPrice();
         }
         return totalAmount;
     }
@@ -23,11 +26,15 @@ public class Store {
     public int calculateDiscountAmount(List<Order> orders) {
         int totalDiscountAmount = 0;
         for (Order order : orders){
-            totalDiscountAmount += order.getDiscountAmount();
+            Product product = getProductAtInventory(order);
+            Promotion promotion = product.getPromotion();
+
+            if (promotion != null) {
+                totalDiscountAmount += promotion.calculateDiscount(order.getQuantity(), product.getPrice(), order.getOrderDate());
+            }
         }
         return totalDiscountAmount;
     }
-
     public int calculateFinalAmount(List<Order> orders) {
         return calculateTotalAmount(orders) - calculateDiscountAmount(orders);
     }
@@ -41,6 +48,14 @@ public class Store {
         return successOrders;
     }
 
+
+    /* --------------------------------------------------------------------------------------------*/
+
+    private Product getProductAtInventory(Order order) {
+        return inventory.findByProductName(order.getProductName());
+    }
+
+
     private void updateStock(Order order) {
         Product product = getProduct(order);
         Integer quantity = order.getQuantity();
@@ -48,7 +63,7 @@ public class Store {
     }
 
     private Product getProduct(Order order) {
-        Product product = order.getProduct();
+        Product product = getProductAtInventory(order);
         checkExistProduct(product);
         return product;
     }
