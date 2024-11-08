@@ -3,17 +3,35 @@ package store.model;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import store.utils.message.ErrorMessage;
 
 public class Inventory {
     private final Map<Product, Integer> standardStock = new HashMap<>();
     private final Map<Product, Integer> promotionStock = new HashMap<>();
 
+    public void addProducts(Map<Product, Integer> newProducts){
+        Set<Product> products = newProducts.keySet();
+        for (Product product : products){
+            Integer quantity = newProducts.get(product);
+
+            if (product.hasPromotion()){
+                addStock(promotionStock, product, quantity);
+                return;
+            }
+            addStock(standardStock, product, quantity);
+        }
+    }
+
     public void checkOrderIsPossible(List<Order> orders) {
         for (Order order : orders){
             int totalStockCount = getTotalStockCount(order.getProductName());
             validateStockAvailability(totalStockCount, order.getQuantity());
         }
+    }
+
+    private void addStock(Map<Product, Integer> stock, Product product, Integer quantity) {
+        stock.put(product, stock.getOrDefault(product, 0) + quantity);
     }
 
     private void validateStockAvailability(int totalStockCount, Integer orderQuantity) {
