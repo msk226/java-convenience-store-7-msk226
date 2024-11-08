@@ -11,6 +11,11 @@ public class Product {
         this.price = price;
         this.promotion = promotion;
     }
+
+    public boolean hasPromotion(){
+        return promotion == null;
+    }
+
     public String getName() {
         return name;
     }
