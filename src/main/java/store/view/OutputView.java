@@ -29,7 +29,7 @@ public class OutputView {
             System.out.println(product.getName() + TAB + getFormattedPrice(product.getPrice()) + TAB +
                     products.get(product) + COUNT + TAB +  promotionName);
         }
-
+        System.out.println(BLANK);
     }
 
     private static String getFormattedPrice(Integer price){
