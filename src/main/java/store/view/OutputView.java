@@ -22,7 +22,7 @@ public class OutputView {
 
             String promotionName = "null";
 
-            if (!product.hasPromotion()){
+            if (product.hasPromotion()){
                 promotionName = product.getPromotion().getName();
             }
 
@@ -30,6 +30,11 @@ public class OutputView {
                     products.get(product) + COUNT + TAB +  promotionName);
         }
         System.out.println(BLANK);
+    }
+
+    public static void printFreePromotionItems(Product product, Integer quantity){
+        String message = String.format(FREE_PROMOTION_MESSAGE, product.getName(), quantity);
+        System.out.println(message);
     }
 
     private static String getFormattedPrice(Integer price){
