@@ -49,6 +49,14 @@ public class Inventory {
         return orderResult;
     }
 
+    public boolean isEligibleFreeItems(Product product, Integer orderAmount){
+        Integer buyAmount = product.getPromotion().getBuyAmount();
+        Integer getAmount = product.getPromotion().getGetAmount();
+
+        Integer stock = promotionStock.get(product);
+        return stock >= (orderAmount / (buyAmount + getAmount));
+    }
+
     public Map<Product, Integer> giveFreeItem(Map<Product, Integer> orderResult, Product product, Integer quantity){
         reduceStock(promotionStock, product, quantity);
         orderResult.put(product, orderResult.get(product) + 1);

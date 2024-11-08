@@ -21,7 +21,7 @@ public class Store {
     }
 
     public boolean checkEligibleFreeItems(Product product, Integer quantity){
-        if (!product.hasPromotion()){
+        if (!product.hasPromotion() || !inventory.isEligibleFreeItems(product, quantity)){
             return false;
         }
         return product.getPromotion().checkEligibleFreeItems(quantity);
