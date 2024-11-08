@@ -10,19 +10,17 @@ import static store.utils.constant.PromotionConstant.PROMOTION_TITLE_INDEX;
 import static store.utils.message.ErrorMessage.INVALID_INPUT;
 import static store.utils.message.ErrorMessage.INVALID_PROMOTION_NAME;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import store.model.Product;
 import store.model.Promotion;
-import store.utils.message.ErrorMessage;
 
 public class ProductConverter {
 
-    public static Map<Product, Integer> convertToProduct(List<String> inputProducts, List<Promotion> promotions){
+    public static Map<Product, Integer> convertToProduct(List<String> inputProducts, List<Promotion> promotions) {
         Map<Product, Integer> products = new HashMap<>();
-        for (String inputProduct : inputProducts.subList(PROMOTION_TITLE_INDEX, inputProducts.size())){
+        for (String inputProduct : inputProducts.subList(PROMOTION_TITLE_INDEX, inputProducts.size())) {
             String[] input = parseInputProduct(inputProduct);
             Product product = createProduct(input, promotions);
             products.put(product, getQuantity(input));
@@ -48,11 +46,11 @@ public class ProductConverter {
         Integer price = parsePrice(input);
         Promotion promotion = parsePromotion(input, promotions);
 
-        return new Product(name, price,promotion);
+        return new Product(name, price, promotion);
     }
 
     private static void validateProductInput(String[] input) {
-        if (input.length != PRODUCT_INPUT_LENGTH){
+        if (input.length != PRODUCT_INPUT_LENGTH) {
             throw new IllegalArgumentException();
         }
     }
@@ -60,6 +58,7 @@ public class ProductConverter {
     private static String getProductName(String[] input) {
         return input[NAME_INDEX];
     }
+
     private static Integer parsePrice(String[] input) {
         try {
             return Integer.valueOf(input[PRICE_INDEX]);
@@ -79,7 +78,7 @@ public class ProductConverter {
                 return promotion;
             }
         }
-        throw new IllegalArgumentException(INVALID_PROMOTION_NAME);
+        return null;
     }
 
 }
