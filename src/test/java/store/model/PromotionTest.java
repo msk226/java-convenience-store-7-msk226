@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 public class PromotionTest {
 
+    private final Promotion promotion;
     private final String NAME = "MD추천상품";
     private final Integer BUY_AMOUNT = 1;
     private final Integer GET_AMOUNT = 1;
@@ -45,6 +46,18 @@ public class PromotionTest {
     void 프로모션의_종료날짜는_시작날짜_이후여야_한다(){
         assertThrows(IllegalArgumentException.class,
                 () -> new Promotion(NAME, BUY_AMOUNT, GET_AMOUNT, START_DATE, LocalDate.MIN));
+    }
+
+    @Test
+    void 프로모션_할인_가격_계산(){
+        Promotion promotion = new Promotion(NAME, BUY_AMOUNT, GET_AMOUNT, START_DATE, END_DATE);
+        assertEquals(50_000, promotion.calculateDiscount(1_000, 1_000, LocalDate.now()));
+    }
+
+    @Test
+    void 프로모션_기간이_아니면_프로모션을_적용하지_않고_계산(){
+        Promotion promotion = new Promotion(NAME, BUY_AMOUNT, GET_AMOUNT, START_DATE, END_DATE);
+        assertEquals(100_000, promotion.calculateDiscount(1_000, 1_000, LocalDate.MAX));
     }
 
 }
