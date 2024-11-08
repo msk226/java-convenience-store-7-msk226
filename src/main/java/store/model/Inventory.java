@@ -30,6 +30,30 @@ public class Inventory {
         }
     }
 
+
+    public Map<Product, Integer> retrieveProductForOrder(List<Order> orders) {
+        Map<Product, Integer> orderResult = new HashMap<>();
+
+        for (Order order : orders){
+            int remainingQuantity = order.getQuantity();
+
+            // 프로모션 재고에서 먼저 차감
+            remainingQuantity = processStock(order, orderResult, promotionStock, remainingQuantity);
+
+            // 표준 재고에서 나머지 차감
+            processOrderInStandardStock(order, remainingQuantity, orderResult);
+        }
+
+        return orderResult;
+    }
+
+    public void giveFreeItem(Product product, Integer quantity){
+        reduceStock(promotionStock, product, quantity);
+    }
+
+
+    /*-----------------------------------------------------------------------------------------------------------------*/
+
     private void addStock(Map<Product, Integer> stock, Product product, Integer quantity) {
         stock.put(product, stock.getOrDefault(product, 0) + quantity);
     }
@@ -38,31 +62,6 @@ public class Inventory {
         if (totalStockCount < orderQuantity) {
             throw new IllegalArgumentException(ErrorMessage.NOT_ENOUGH_STOCK);
         }
-    }
-
-    public Map<Product, Integer> retrieveProductForOrder(List<Order> orders) {
-        Map<Product, Integer> orderResult = new HashMap<>();
-        for (Order order : orders){
-            int remainingQuantity = order.getQuantity();
-
-            // 프로모션 재고에서 먼저 차감
-            remainingQuantity = processStock(order, orderResult, promotionStock, remainingQuantity);
-            
-            // 표준 재고에서 나머지 차감
-            processOrderInStandardStock(order, remainingQuantity, orderResult);
-        }
-
-        return orderResult;
-    }
-
-    public Map<Product, Integer> giveFreeItem(Map<Product, Integer> orderResult, Product product ,Integer quantity){
-        if (!orderResult.containsKey(product)) {
-            throw new IllegalArgumentException(ErrorMessage.NON_EXIST_PRODUCT);
-        }
-        reduceStock(promotionStock, product, quantity);
-
-        orderResult.put(product, quantity + orderResult.get(product));
-        return orderResult;
     }
 
     private void processOrderInStandardStock(Order order, int remainingQuantity, Map<Product, Integer> orderResult) {
