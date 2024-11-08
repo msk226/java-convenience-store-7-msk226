@@ -21,7 +21,7 @@ import store.model.Promotion;
 import store.utils.message.ErrorMessage;
 
 public class PromotionConverter {
-    public List<Promotion> convertToPromotion(List<String> inputPromotions){
+    public static List<Promotion> convertToPromotion(List<String> inputPromotions){
         List<Promotion> promotions = new ArrayList<>();
 
         for (String inputPromotion : inputPromotions.subList(PROMOTION_TITLE_INDEX, inputPromotions.size())){
@@ -33,7 +33,7 @@ public class PromotionConverter {
     }
 
 
-    private Promotion createPromotion(String[] input) {
+    private static Promotion createPromotion(String[] input) {
         String name = parseName(input);
         Integer buyAmount = parseBuyAmount(input);
         Integer getAmount = parseGetAmount(input);
@@ -42,11 +42,11 @@ public class PromotionConverter {
         return new Promotion(name, buyAmount, getAmount, startDate, endDate);
     }
 
-    private String parseName(String[] input) {
+    private static String parseName(String[] input) {
         return input[NAME_INDEX];
     }
 
-    private Integer parseBuyAmount(String[] input) {
+    private static Integer parseBuyAmount(String[] input) {
         try {
             return Integer.valueOf(input[BUY_AMOUNT_INDEX]);
         } catch (NumberFormatException e) {
@@ -54,7 +54,7 @@ public class PromotionConverter {
         }
     }
 
-    private Integer parseGetAmount(String[] input) {
+    private static Integer parseGetAmount(String[] input) {
         try {
             return Integer.valueOf(input[GET_AMOUNT_INDEX]);
         } catch (NumberFormatException e) {
@@ -62,7 +62,7 @@ public class PromotionConverter {
         }
     }
 
-    private LocalDate parseStartDate(String[] input) {
+    private static LocalDate parseStartDate(String[] input) {
         try {
             return LocalDate.parse(input[START_DATE_INDEX], DateTimeFormatter.ofPattern(PROMOTION_DATE_FORMAT));
         } catch (DateTimeParseException e) {
@@ -70,7 +70,7 @@ public class PromotionConverter {
         }
     }
 
-    private LocalDate parseEndDate(String[] input) {
+    private static LocalDate parseEndDate(String[] input) {
         try {
             return LocalDate.parse(input[END_DATE_INDEX], DateTimeFormatter.ofPattern(PROMOTION_DATE_FORMAT));
         } catch (DateTimeParseException e) {
@@ -79,7 +79,7 @@ public class PromotionConverter {
     }
 
 
-    private String[] parseInputPromotion(String inputPromotion) {
+    private static String[] parseInputPromotion(String inputPromotion) {
         String[] input = inputPromotion.split(PROMOTION_SPILT_REGEX);
         if (input.length != PROMOTION_INPUT_LENGTH) {
             throw new IllegalArgumentException(INVALID_INPUT);
