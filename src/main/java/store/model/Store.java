@@ -47,12 +47,9 @@ public class Store {
     }
 
     public Map<Product, Integer> processOrder(List<Order> orders){
-        for (Order order : orders){
-            inventory.checkOrderIsPossible(order);
+        inventory.checkOrderIsPossible(orders);
 
-            Map<Product, Integer> productForOrder = inventory.retrieveProductForOrder(orders);
-        }
-        return successOrders;
+        return inventory.retrieveProductForOrder(orders);
     }
 
 

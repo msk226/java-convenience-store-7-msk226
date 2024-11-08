@@ -1,6 +1,7 @@
 package store.model;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import store.utils.message.ErrorMessage;
 
@@ -8,27 +9,38 @@ public class Inventory {
     private final Map<Product, Integer> standardStock = new HashMap<>();
     private final Map<Product, Integer> promotionStock = new HashMap<>();
 
-    public void checkOrderIsPossible(Order order) {
-        int totalStockCount = getTotalStockCount(order.getProductName());
+    public void checkOrderIsPossible(List<Order> orders) {
+        for (Order order : orders){
+            int totalStockCount = getTotalStockCount(order.getProductName());
+            validateStockAvailability(totalStockCount, order.getQuantity());
+        }
+    }
 
-        if (totalStockCount < order.getQuantity()) {
+    private void validateStockAvailability(int totalStockCount, Integer order) {
+        if (totalStockCount < order) {
             throw new IllegalArgumentException(ErrorMessage.NOT_ENOUGH_STOCK);
         }
     }
 
-    public Map<Product, Integer> retrieveProductForOrder(Order order) {
+    public Map<Product, Integer> retrieveProductForOrder(List<Order> orders) {
         Map<Product, Integer> orderResult = new HashMap<>();
-        int remainingQuantity = order.getQuantity();
+        for (Order order : orders){
+            int remainingQuantity = order.getQuantity();
 
-        // 프로모션 재고에서 먼저 차감
-        remainingQuantity = processStock(order, orderResult, promotionStock, remainingQuantity);
-
-        // 표준 재고에서 나머지 차감
-        if (remainingQuantity > 0) {
-            processStock(order, orderResult, standardStock, remainingQuantity);
+            // 프로모션 재고에서 먼저 차감
+            remainingQuantity = processStock(order, orderResult, promotionStock, remainingQuantity);
+            
+            // 표준 재고에서 나머지 차감
+            processOrderInStandardStock(order, remainingQuantity, orderResult);
         }
 
         return orderResult;
+    }
+
+    private void processOrderInStandardStock(Order order, int remainingQuantity, Map<Product, Integer> orderResult) {
+        if (remainingQuantity > 0) {
+            processStock(order, orderResult, standardStock, remainingQuantity);
+        }
     }
 
     private int processStock(Order order, Map<Product, Integer> orderResult, Map<Product, Integer> stock, int remainingQuantity) {
@@ -70,9 +82,7 @@ public class Inventory {
 
     private int getCurrentStock(Map<Product, Integer> stock, Product product, int quantity) {
         int currentStock = stock.getOrDefault(product, 0);
-        if (currentStock < quantity) {
-            throw new IllegalArgumentException(ErrorMessage.NOT_ENOUGH_STOCK);
-        }
+        validateStockAvailability(currentStock, quantity);
         return currentStock;
     }
 }
