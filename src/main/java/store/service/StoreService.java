@@ -22,7 +22,6 @@ public class StoreService {
         return store.processOrder(orders);
     }
 
-    //TODO 프로모션 적용이 가능한 상품에 대해 고객이 해당 수량만큼 가져오지 않았을 경우, 혜택에 대한 안내 메시지를 출력한다. -> 검증 로직 만들어짐
     //TODO 프로모션 재고가 부족하여 일부 수량을 프로모션 혜택 없이 결제해야 하는 경우, 일부 수량에 대해 정가로 결제할지 여부에 대한 안내 메시지를 출력한다.-> 얘도 뭐 대충은 된 듯
     //TODO 멤버십 할인 적용 여부를 확인하기 위해 안내 문구를 출력한다.
     //TODO 구매 상품 내역, 증정 상품 내역, 금액 정보를 출력한다. -> 얘도 거의 다 된 듯
@@ -38,5 +37,9 @@ public class StoreService {
             }
         }
         return promotionProduct;
+    }
+
+    public Map<Product, Integer> getFreeItem(Map<Product, Integer> orderResult, Product product, Store store){
+        return store.getFreeItem(orderResult, product, 1);
     }
 }
