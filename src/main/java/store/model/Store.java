@@ -35,13 +35,22 @@ public class Store {
     public List<Order> processOrder(List<Order> orders){
         List<Order> successOrders = new ArrayList<>();
         for (Order order : orders){
-            Product product = order.getProduct();
-            Integer quantity = order.getQuantity();
-            checkExistProduct(product);
-            inventory.reduceStock(product, quantity);
+            updateStock(order);
             successOrders.add(order);
         }
         return successOrders;
+    }
+
+    private void updateStock(Order order) {
+        Product product = getProduct(order);
+        Integer quantity = order.getQuantity();
+        inventory.reduceStock(product, quantity);
+    }
+
+    private Product getProduct(Order order) {
+        Product product = order.getProduct();
+        checkExistProduct(product);
+        return product;
     }
 
     private void checkExistProduct(Product product) {
