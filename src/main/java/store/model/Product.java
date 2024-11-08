@@ -13,7 +13,7 @@ public class Product {
     }
 
     public boolean hasPromotion(){
-        return promotion == null;
+        return promotion != null;
     }
 
     public String getName() {
