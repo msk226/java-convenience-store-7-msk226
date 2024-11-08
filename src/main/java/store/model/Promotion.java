@@ -24,6 +24,14 @@ public class Promotion {
         this.endDate = endDate;
     }
 
+    public int calculateDiscount(int quantity, int unitPrice, LocalDate orderDate){
+        if (orderDate.isBefore(startDate) || orderDate.isAfter(endDate)){
+            return 0;
+        }
+        int discountQuantity = (quantity / (buyAmount + getAmount)) * getAmount;
+        return discountQuantity * unitPrice;
+    }
+
     private void validatePromotion(Integer buyAmount, Integer getAmount, LocalDate startDate, LocalDate endDate){
         validatePromotionBuy(buyAmount);
         validatePromotionGet(getAmount);
