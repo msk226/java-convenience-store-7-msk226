@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public class PromotionConstant {
 
 
+    public static final String PROMOTION_FILE_PATH = "src/main/resources/promotions.md";
     public static final Integer PROMOTION_TITLE_INDEX = 1;
 
     public static final Integer NAME_INDEX = 0;

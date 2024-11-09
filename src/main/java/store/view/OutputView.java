@@ -20,7 +20,7 @@ public class OutputView {
         Set<Product> productsKeys = products.keySet();
         for (Product product : productsKeys){
 
-            String promotionName = "null";
+            String promotionName = DEFAULT_PROMOTION_NAME;
 
             if (product.hasPromotion()){
                 promotionName = product.getPromotion().getName();
@@ -34,8 +34,8 @@ public class OutputView {
 
 
     private static String getFormattedPrice(Integer price){
-        DecimalFormat decimalFormat = new DecimalFormat("#,###");
-        return decimalFormat.format(price) + "원";
+        DecimalFormat decimalFormat = new DecimalFormat(COUNT_FORMAT);
+        return decimalFormat.format(price) + WON;
     }
 
 }
