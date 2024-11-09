@@ -4,7 +4,9 @@ import static store.utils.constant.ProductConstant.PRODUCT_FILE_PATH;
 import static store.utils.constant.PromotionConstant.PROMOTION_FILE_PATH;
 import static store.utils.message.ErrorMessage.*;
 import static store.utils.message.InputMessage.*;
+import static store.utils.message.OutputMessage.DIVISION;
 import static store.utils.message.OutputMessage.PROMOTION_DIVISION;
+import static store.utils.message.OutputMessage.WELCOME_MESSAGE;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,6 +24,7 @@ import store.view.OutputView;
 
 public class StoreController {
     private static final Integer ZERO = 0;
+    private static final Integer FREE_ITEM = 1;
 
     private final StoreService storeService;
 
@@ -51,7 +54,7 @@ public class StoreController {
 
 
     private Store openStore() {
-        OutputView.printWelcomeMessage();
+        OutputView.printMessage(WELCOME_MESSAGE);
         List<Promotion> promotions = loadPromotions();
         Map<Product, Integer> products = loadProducts(promotions);
 
@@ -61,10 +64,11 @@ public class StoreController {
     private void processOrder(Store store) {
         OutputView.printProducts(store.getProducts());
         OrderResult orderResult = createOrderResult(store);
-        processDiscounts(store, orderResult);
+        List<Product> products = processDiscounts(store, orderResult);
         int membershipDiscount = applyMembershipDiscount(orderResult);
 
         OutputView.printTotalQuantity(orderResult);
+        OutputView.printPromotionQuantity(products);
         printAmounts(orderResult, membershipDiscount);
     }
 
@@ -85,23 +89,29 @@ public class StoreController {
         return storeService.processOrder(orders, store);
     }
 
-    private void processDiscounts(Store store, OrderResult orderResult) {
-        handleFreeItems(store, orderResult);
+    private List<Product> processDiscounts(Store store, OrderResult orderResult) {
+        List<Product> freeItems = handleFreeItems(store, orderResult);
         checkNonAppliedPromotions(orderResult);
+
+        return freeItems;
     }
 
-    private void handleFreeItems(Store store, OrderResult orderResult) {
+    private List<Product> handleFreeItems(Store store, OrderResult orderResult) {
         List<Product> freeItems = storeService.checkEligibleFreeItems(store, orderResult);
         for (Product product : freeItems) {
-            promptFreeItemAddition(product, store, orderResult);
+            if (!promptFreeItemAddition(product, store, orderResult))
+                freeItems.remove(product);
         }
+        return freeItems;
     }
 
-    private void promptFreeItemAddition(Product product, Store store, OrderResult orderResult) {
+    private boolean promptFreeItemAddition(Product product, Store store, OrderResult orderResult) {
         String input = InputView.input(String.format(PROMOTION_MESSAGE_TEMPLATE, product.getName(), 1));
         if (input.equals(YES)) {
             storeService.getFreeItem(product, store, orderResult);
+            return true;
         }
+        return false;
     }
 
     private void checkNonAppliedPromotions(OrderResult orderResult) {
