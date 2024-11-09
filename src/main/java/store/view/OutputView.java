@@ -3,6 +3,7 @@ package store.view;
 import static store.utils.message.OutputMessage.*;
 
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -24,21 +25,57 @@ public class OutputView {
 
 
     // 총합, 수량 출력
-    public static void printTotalQuantity(OrderResult orderResult){
+    public static void printTotalQuantity(OrderResult orderResult) {
         printReceiptWelcomeMessage();
         Map<Product, Integer> orderedProducts = orderResult.getOrderedProducts();
-        Set<Product> products = orderedProducts.keySet();
-        for (Product product : products){
-            int totalPrice = product.getPrice() * orderedProducts.get(product);
-            System.out.printf(PRODUCT_MESSAGE, product.getName(), orderResult.getQuantity(product), totalPrice);
+
+        // 상품별로 수량과 금액 합산
+        Map<String, Integer> totalQuantityByProduct = calculateTotalQuantityByProduct(orderedProducts);
+        Map<String, Integer> totalPriceByProduct = calculateTotalPriceByProduct(orderedProducts);
+
+        // 합산된 수량과 금액 출력
+        printSummary(totalQuantityByProduct, totalPriceByProduct);
+    }
+
+    // 상품별로 수량 합산
+    private static Map<String, Integer> calculateTotalQuantityByProduct(Map<Product, Integer> orderedProducts) {
+        Map<String, Integer> totalQuantityByProduct = new HashMap<>();
+        for (Map.Entry<Product, Integer> entry : orderedProducts.entrySet()) {
+            Product product = entry.getKey();
+            int quantity = entry.getValue();
+            totalQuantityByProduct.merge(product.getName(), quantity, Integer::sum);
+        }
+        return totalQuantityByProduct;
+    }
+
+    // 상품별로 금액 합산
+    private static Map<String, Integer> calculateTotalPriceByProduct(Map<Product, Integer> orderedProducts) {
+        Map<String, Integer> totalPriceByProduct = new HashMap<>();
+        for (Map.Entry<Product, Integer> entry : orderedProducts.entrySet()) {
+            Product product = entry.getKey();
+            int quantity = entry.getValue();
+            int totalPrice = product.getPrice() * quantity;
+            totalPriceByProduct.merge(product.getName(), totalPrice, Integer::sum);
+        }
+        return totalPriceByProduct;
+    }
+
+    // 수량과 금액 출력
+    private static void printSummary(Map<String, Integer> totalQuantityByProduct, Map<String, Integer> totalPriceByProduct) {
+        for (String productName : totalQuantityByProduct.keySet()) {
+            int totalQuantity = totalQuantityByProduct.get(productName);
+            int totalPrice = totalPriceByProduct.get(productName);
+            System.out.printf(PRODUCT_MESSAGE, productName, totalQuantity, totalPrice);
         }
     }
+
+
 
     // 프로모션 적용 수량 출력
     public static void printPromotionQuantity(List<Product> products){
         printMessage(PROMOTION_DIVISION);
         for (Product product : products){
-            System.out.printf(PROMOTION, product.getName(), FREE_ITEM);
+            System.out.printf(PROMOTION, product.getName(), FREE_ITEM * products.size());
         }
         printMessage(DIVISION);
     }
