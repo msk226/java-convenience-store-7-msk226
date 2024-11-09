@@ -64,8 +64,8 @@ public class StoreService {
     public int getMembershipAmount(OrderResult orderResult){
         return orderResult.calculateMembershipAmount();
     }
-    public int getPayAmount(OrderResult orderResult){
-        return orderResult.calculateFinalAmount(LocalDate.now());
+    public int getPayAmount(OrderResult orderResult, Integer membershipDiscount){
+        return orderResult.calculateFinalAmount(LocalDate.now(), membershipDiscount);
     }
 
 }

@@ -77,8 +77,8 @@ public class OrderResult {
         return (int) (totalNonPromotedPrice * MEMBERSHIP);
     }
 
-    public int calculateFinalAmount(LocalDate orderDate) {
-        return calculateTotalAmount() - (calculateDiscountAmount(orderDate) + calculateMembershipAmount());
+    public int calculateFinalAmount(LocalDate orderDate, Integer membershipDiscount) {
+        return calculateTotalAmount() - (calculateDiscountAmount(orderDate) + membershipDiscount);
     }
 
     /* -------------------------------------------------------------------------------------------------------------------*/
