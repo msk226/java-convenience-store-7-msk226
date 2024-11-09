@@ -11,9 +11,11 @@ public class OrderResult {
     private static final Double MEMBERSHIP = 0.30;
 
     private final Map<Product, Integer> orderedProducts;
+    private final LocalDate orderDate;
 
     public OrderResult(Map<Product, Integer> orderedProducts) {
         this.orderedProducts = orderedProducts;
+        this.orderDate = LocalDate.now();
     }
 
     /* -------------------------------------------------------------------------------------------------------------------*/
@@ -50,7 +52,7 @@ public class OrderResult {
         return totalAmount;
     }
 
-    public int calculateDiscountAmount(LocalDate orderDate) {
+    public int calculateDiscountAmount() {
         int totalDiscountAmount = ZERO;
         Set<Product> products = orderedProducts.keySet();
         for (Product product : products){
@@ -63,22 +65,17 @@ public class OrderResult {
     }
 
     public int calculateMembershipAmount(){
-        int totalNonPromotedPrice = 0;
-
-        for (Map.Entry<Product, Integer> entry : orderedProducts.entrySet()) {
-            Product product = entry.getKey();
-            int quantity = entry.getValue();
-
-            if (product.getPromotion() == null) {
-                totalNonPromotedPrice += product.getPrice() * quantity;
-            }
-        }
+        int totalNonPromotedPrice = calculateTotalAmount() - calculateDiscountAmount();
 
         return (int) (totalNonPromotedPrice * MEMBERSHIP);
     }
 
-    public int calculateFinalAmount(LocalDate orderDate, Integer membershipDiscount) {
-        return calculateTotalAmount() - (calculateDiscountAmount(orderDate) + membershipDiscount);
+    public int calculateFinalAmount(Integer membershipDiscount) {
+        return calculateTotalAmount() - (calculateDiscountAmount() + membershipDiscount);
+    }
+
+    public LocalDate getOrderDate() {
+        return orderDate;
     }
 
     /* -------------------------------------------------------------------------------------------------------------------*/
