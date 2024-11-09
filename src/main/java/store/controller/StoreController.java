@@ -1,6 +1,8 @@
 package store.controller;
 
 
+import static store.utils.constant.ProductConstant.PRODUCT_FILE_PATH;
+import static store.utils.constant.PromotionConstant.PROMOTION_FILE_PATH;
 import static store.utils.message.InputMessage.*;
 
 import java.util.HashMap;
@@ -16,6 +18,8 @@ import store.model.Product;
 import store.model.Promotion;
 import store.model.Store;
 import store.service.StoreService;
+import store.utils.constant.ProductConstant;
+import store.utils.constant.PromotionConstant;
 import store.utils.message.InputMessage;
 import store.view.InputView;
 import store.view.OutputView;
@@ -31,8 +35,8 @@ public class StoreController {
     public Store openStore(){
         OutputView.printWelcomeMessage();
 
-        List<String> inputPromotions = InputView.inputData("src/main/resources/promotions.md");
-        List<String> inputProducts = InputView.inputData("src/main/resources/products.md");
+        List<String> inputPromotions = InputView.inputData(PROMOTION_FILE_PATH);
+        List<String> inputProducts = InputView.inputData(PRODUCT_FILE_PATH);
 
         List<Promotion> promotions = PromotionConverter.convertToPromotion(inputPromotions);
         Map<Product, Integer> products = ProductConverter.convertToProduct(inputProducts, promotions);
@@ -62,7 +66,7 @@ public class StoreController {
         for (Product product : eligibleFreeItems){
             String message = String.format(PROMOTION_MESSAGE_TEMPLATE, product.getName(), 1);
             String input = InputView.input(message);
-            if (!input.equals("Y")){
+            if (!input.equals(YES)){
                 continue;
             }
             orderResults = storeService.getFreeItem(product, store);
@@ -76,7 +80,7 @@ public class StoreController {
             if (!product.hasPromotion()){
                 String input = InputView.input(
                         String.format(PROMOTION_IS_NOT_APPLY, product.getName(), orderResult.get(product)));
-                if (!input.equals("Y")){
+                if (!input.equals(YES)){
                     return;
                 }
             }
