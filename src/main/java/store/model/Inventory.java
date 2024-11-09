@@ -1,6 +1,7 @@
 package store.model;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,11 +12,22 @@ public class Inventory {
     private static final Integer ZERO = 0;
     private static final Integer FREE_ITEM = 1;
 
-    private final Map<Product, Integer> standardStock = new HashMap<>();
-    private final Map<Product, Integer> promotionStock = new HashMap<>();
+    private final Map<Product, Integer> standardStock = new LinkedHashMap<>();
+    private final Map<Product, Integer> promotionStock = new LinkedHashMap<>();
 
 
     /* -------------------------------------------------------------------------------------------------------------------*/
+
+    public Map<Product, Integer> getStock(){
+        Map<Product, Integer> combinedStock = new HashMap<>(standardStock);
+
+        // 프로모션 재고가 있으면 기존 재고에 더하기
+        for (Map.Entry<Product, Integer> entry : promotionStock.entrySet()) {
+            combinedStock.merge(entry.getKey(), entry.getValue(), Integer::sum);
+        }
+
+        return combinedStock;
+    }
     // 재고 채우기
     public void addProducts(Map<Product, Integer> newProducts){
         Set<Product> products = newProducts.keySet();
