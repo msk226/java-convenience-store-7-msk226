@@ -74,6 +74,34 @@ public class OrderResult {
         return calculateTotalAmount() - (calculateDiscountAmount() + membershipDiscount);
     }
 
+    public int calculatePromotionBonusQuantity(Product product){
+        if (!product.hasPromotion()){
+            return 0;
+        }
+        int quantity = orderedProducts.get(product);
+        return product.getPromotion().countPromotionAmount(quantity);
+    }
+
+    public int getQuantityByProductName(String productName){
+        Set<Product> products = orderedProducts.keySet();
+        int total = 0;
+        for (Product product : products){
+            if (product.getName().equals(productName)){
+                total += orderedProducts.get(product);
+            }
+        }
+        return total;
+    }
+
+
+    public int calculatePromotionIsNotApplied(Product product){
+        Promotion promotion = product.getPromotion();
+
+        return getQuantityByProductName(product.getName()) - (calculatePromotionBonusQuantity(product)
+                * (promotion.getBuyAmount() + promotion.getGetAmount()));
+    }
+
+
     public LocalDate getOrderDate() {
         return orderDate;
     }
