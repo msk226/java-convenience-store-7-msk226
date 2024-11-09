@@ -27,16 +27,16 @@ public class OutputView {
 
     // 프로모션 적용 수량 출력
     public static void printPromotionQuantity(String productName, int promotionQuantity){
-        System.out.println(PROMOTION_DIVISION);
         System.out.printf(PROMOTION, productName, promotionQuantity);
     }
 
     // 총 구매액, 행사할인, 멤버십 할인, 실제 결제액 출력
     public static void printAmount(int totalAmount, int discountAmount, int membershipAmount, int payAmount){
-        System.out.printf(TOTAL_AMOUNT, TOTAL_AMOUNT_LABEL, totalAmount, totalAmount);
-        System.out.printf(DISCOUNT_AMOUNT, DISCOUNT_AMOUNT_LABEL, discountAmount, discountAmount);
-        System.out.printf(MEMBERSHIP_AMOUNT, MEMBERSHIP_AMOUNT_LABEL, membershipAmount, membershipAmount);
-        System.out.printf(PAY_AMOUNT, PAY_AMOUNT_LABEL, payAmount, payAmount);
+        System.out.println(DIVISION);
+        System.out.printf(TOTAL_AMOUNT, TOTAL_AMOUNT_LABEL, getFormattedPrice(totalAmount));
+        System.out.printf(DISCOUNT_AMOUNT, DISCOUNT_AMOUNT_LABEL, getFormattedPrice(discountAmount));
+        System.out.printf(MEMBERSHIP_AMOUNT, MEMBERSHIP_AMOUNT_LABEL, getFormattedPrice(membershipAmount));
+        System.out.printf(PAY_AMOUNT, PAY_AMOUNT_LABEL,getFormattedPrice(payAmount));
         System.out.println(DIVISION);
     }
 
@@ -48,7 +48,7 @@ public class OutputView {
                 promotionName = product.getPromotion().getName();
             }
             System.out.println(PREFIX + product.getName() + TAB +
-                    getFormattedPrice(product.getPrice()) + TAB +
+                    getFormattedPrice(product.getPrice()) + WON + TAB +
                     products.get(product) + COUNT + TAB +
                     promotionName);
         }
@@ -59,7 +59,7 @@ public class OutputView {
     // 금액 포맷팅
     private static String getFormattedPrice(Integer price){
         DecimalFormat decimalFormat = new DecimalFormat(COUNT_FORMAT);
-        return decimalFormat.format(price) + WON;
+        return decimalFormat.format(price);
     }
 
     // 영수증 출력 헤더

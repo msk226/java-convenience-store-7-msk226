@@ -16,12 +16,12 @@ public class OutputMessage {
 
     // 영수증 관련 메시지
     public static final String RECEIPT_WELCOME_MESSAGE = "==============W 편의점================";
-    public static final String RECEIPT_TITLE_MESSAGE = String.format("%-15s%-8s%-12s", "상품명", "수량", "금액");
-    public static final String PRODUCT_MESSAGE = "%-15s%-8d%,8d\n";  // 상품명 15자리, 수량 8자리, 금액 12자리로 고정
+
+    public static final String RECEIPT_TITLE_MESSAGE = String.format("%-18s%-15s%-8s", "상품명", "수량", "금액");
+    public static final String PRODUCT_MESSAGE = "%-18s%-15d%,8d\n";  // 상품명 18자리, 수량 15자리, 금액 15자리
 
     // 프로모션 관련 메시지
-    public static final String PROMOTION = "%-15s%-8d\n";
-
+    public static final String PROMOTION = "%-18s%-15d\n";
 
     // 금액 관련 메시지
     public static final String TOTAL_AMOUNT_LABEL = "총구매액";
@@ -30,12 +30,12 @@ public class OutputMessage {
     public static final String PAY_AMOUNT_LABEL = "내실돈";
 
     // 금액 출력 형식
-    public static final String TOTAL_AMOUNT = "%-15s%-8d%,12d\n";
-    public static final String DISCOUNT_AMOUNT = "%-15s%-8d%,12d\n";
-    public static final String MEMBERSHIP_AMOUNT = "%-15s%-8d%,12d\n";
-    public static final String PAY_AMOUNT = "%-15s%-8d%,12d\n";
+    public static final String TOTAL_AMOUNT = "%-18s%-15s\n";
+    public static final String DISCOUNT_AMOUNT = "%-18s%-15s\n";
+    public static final String MEMBERSHIP_AMOUNT = "%-18s%-15s\n";
+    public static final String PAY_AMOUNT = "%-18s%-15s\n";
 
     // 구분선
-    public static final String PROMOTION_DIVISION = "=============증\t정===============";
+    public static final String PROMOTION_DIVISION = "=============증   정===============";
     public static final String DIVISION = "====================================";
 }
