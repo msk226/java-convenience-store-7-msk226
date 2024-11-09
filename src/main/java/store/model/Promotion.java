@@ -25,7 +25,15 @@ public class Promotion {
     }
 
     public boolean checkEligibleFreeItems(int quantity){
-        return quantity % (buyAmount + getAmount) == buyAmount;
+        return countEligibleFreeItems(quantity) == buyAmount;
+    }
+
+    public int countPromotionAmount(int quantity){
+        return quantity / (buyAmount + getAmount) * (buyAmount + getAmount);
+    }
+
+    public int countEligibleFreeItems(int quantity){
+        return quantity % (buyAmount + getAmount);
     }
 
     public int calculateDiscount(int quantity, int unitPrice, LocalDate orderDate){

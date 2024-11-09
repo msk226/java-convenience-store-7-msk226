@@ -33,17 +33,23 @@ public class Inventory {
 
     public Map<Product, Integer> retrieveProductForOrder(List<Order> orders) {
         Map<Product, Integer> orderResult = new HashMap<>();
+        Map<Product, Integer> nonPromotionResult = new HashMap<>();
 
-        for (Order order : orders){
+        for (Order order : orders) {
             int remainingQuantity = order.getQuantity();
 
             // 프로모션 재고에서 먼저 차감
-            if (findProductByNameInStock(promotionStock, order.getProductName()) != null){
-                remainingQuantity = processStock(order, orderResult, promotionStock, remainingQuantity);
+            if (findProductByNameInStock(promotionStock, order.getProductName()) != null) {
+                remainingQuantity = processStockWithPromotion(order, orderResult, nonPromotionResult, remainingQuantity);
             }
 
             // 표준 재고에서 나머지 차감
             processOrderInStandardStock(order, remainingQuantity, orderResult);
+        }
+
+        // nonPromotionResult에 있는 재고를 orderResult에 추가
+        for (Map.Entry<Product, Integer> entry : nonPromotionResult.entrySet()) {
+            orderResult.put(entry.getKey(), orderResult.getOrDefault(entry.getKey(), 0) + entry.getValue());
         }
 
         return orderResult;
@@ -74,6 +80,38 @@ public class Inventory {
         if (totalStockCount < orderQuantity) {
             throw new IllegalArgumentException(ErrorMessage.NOT_ENOUGH_STOCK);
         }
+    }
+    private int processStockWithPromotion(Order order, Map<Product, Integer> orderResult, Map<Product, Integer> nonPromotionResult, int remainingQuantity) {
+        Product product = findProductByNameInStock(promotionStock, order.getProductName());
+        Integer stockCount = promotionStock.get(product);
+
+        int applicablePromotionQuantity = calculateApplicablePromotionQuantity(product, stockCount);
+
+        // 프로모션이 적용 가능한 수량을 orderResult에 추가하고, 재고에서 차감
+        if (applicablePromotionQuantity > 0) {
+            int promotionAppliedQuantity = Math.min(applicablePromotionQuantity, remainingQuantity);
+            orderResult.put(product, promotionAppliedQuantity);
+            reduceStock(promotionStock, product, promotionAppliedQuantity);
+            remainingQuantity -= promotionAppliedQuantity;
+        }
+
+        // 남아 있는 수량을 nonPromotionResult에 추가하되, 재고가 충분한 범위 내에서 차감
+        if (remainingQuantity > 0) {
+            int nonPromotionApplicableQuantity = Math.min(stockCount - applicablePromotionQuantity, remainingQuantity);
+            nonPromotionResult.put(product, nonPromotionApplicableQuantity);
+            reduceStock(promotionStock, product, nonPromotionApplicableQuantity);
+            remainingQuantity -= nonPromotionApplicableQuantity;
+        }
+
+        return remainingQuantity;
+    }
+
+    private int calculateApplicablePromotionQuantity(Product product, Integer stockCount) {
+        if (!product.hasPromotion()){
+            return 0;
+        }
+        int promotionCount = product.getPromotion().countPromotionAmount(stockCount);
+        return Math.min(promotionCount, stockCount);
     }
 
     private void processOrderInStandardStock(Order order, int remainingQuantity, Map<Product, Integer> orderResult) {
