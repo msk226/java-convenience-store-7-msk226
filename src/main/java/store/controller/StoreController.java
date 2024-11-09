@@ -6,6 +6,7 @@ import static store.utils.message.ErrorMessage.*;
 import static store.utils.message.InputMessage.*;
 import static store.utils.message.OutputMessage.WELCOME_MESSAGE;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -94,11 +95,16 @@ public class StoreController {
 
     private void handleFreeItems(Store store, OrderResult orderResult) {
         List<Product> freeItems = storeService.checkEligibleFreeItems(store, orderResult);
-        for (Product product : freeItems) {
-            if (!promptFreeItemAddition(product, store, orderResult))
-                freeItems.remove(product);
+        Iterator<Product> iterator = freeItems.iterator();  // Iterator 생성
+
+        while (iterator.hasNext()) {
+            Product product = iterator.next();
+            if (!promptFreeItemAddition(product, store, orderResult)) {
+                iterator.remove();  // Iterator의 remove() 메서드로 안전하게 삭제
+            }
         }
     }
+
 
     private boolean promptFreeItemAddition(Product product, Store store, OrderResult orderResult) {
         String input = InputView.input(String.format(PROMOTION_MESSAGE_TEMPLATE, product.getName(), FREE_ITEM));
@@ -131,7 +137,7 @@ public class StoreController {
     }
 
     private int applyMembershipDiscount(OrderResult orderResult) {
-        if (isMembershipDiscountApplied() && orderResult.calculateDiscountAmount() == 0) {
+        if (isMembershipDiscountApplied()) {
             return storeService.getMembershipAmount(orderResult);
         }
         return ZERO;
