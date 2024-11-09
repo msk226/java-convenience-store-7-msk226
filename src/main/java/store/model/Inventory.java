@@ -126,7 +126,7 @@ public class Inventory {
         if (!product.hasPromotion()){
             return ZERO;
         }
-        int promotionCount = product.getPromotion().countPromotionAmount(stockCount);
+        int promotionCount = product.getPromotion().countTotalPromotionAmount(stockCount);
         return Math.min(promotionCount, stockCount);
     }
 

@@ -30,8 +30,11 @@ public class Promotion {
         return countEligibleFreeItems(quantity) == buyAmount;
     }
 
-    public int countPromotionAmount(int quantity){
+    public int countTotalPromotionAmount(int quantity){
         return quantity / (buyAmount + getAmount) * (buyAmount + getAmount);
+    }
+    public int countPromotionAmount(int quantity){
+        return quantity / (buyAmount + getAmount);
     }
 
     public int countEligibleFreeItems(int quantity){
