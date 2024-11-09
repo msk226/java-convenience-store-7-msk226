@@ -3,6 +3,7 @@ package store.utils.constant;
 public class ProductConstant {
     public static final Integer PROMOTION_TITLE_INDEX = 1;
 
+    public static final String PRODUCT_FILE_PATH = "src/main/resources/products.md";
     public static final Integer NAME_INDEX = 0;
     public static final Integer PRICE_INDEX = 1;
     public static final Integer QUANTITY_INDEX = 2;

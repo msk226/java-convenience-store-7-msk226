@@ -7,6 +7,8 @@ import java.util.Set;
 import store.utils.message.ErrorMessage;
 
 public class Inventory {
+    private static final Integer ZERO = 0;
+    private static final Integer FREE_ITEM = 1;
     private final Map<Product, Integer> standardStock = new HashMap<>();
     private final Map<Product, Integer> promotionStock = new HashMap<>();
 
@@ -49,7 +51,7 @@ public class Inventory {
 
         // nonPromotionResult에 있는 재고를 orderResult에 추가
         for (Map.Entry<Product, Integer> entry : nonPromotionResult.entrySet()) {
-            orderResult.put(entry.getKey(), orderResult.getOrDefault(entry.getKey(), 0) + entry.getValue());
+            orderResult.put(entry.getKey(), orderResult.getOrDefault(entry.getKey(), ZERO) + entry.getValue());
         }
 
         return orderResult;
@@ -65,7 +67,7 @@ public class Inventory {
 
     public Map<Product, Integer> giveFreeItem(Map<Product, Integer> orderResult, Product product, Integer quantity){
         reduceStock(promotionStock, product, quantity);
-        orderResult.put(product, orderResult.get(product) + 1);
+        orderResult.put(product, orderResult.get(product) + FREE_ITEM);
         return orderResult;
     }
 
@@ -73,7 +75,7 @@ public class Inventory {
     /*-----------------------------------------------------------------------------------------------------------------*/
 
     private void addStock(Map<Product, Integer> stock, Product product, Integer quantity) {
-        stock.put(product, stock.getOrDefault(product, 0) + quantity);
+        stock.put(product, stock.getOrDefault(product, ZERO) + quantity);
     }
 
     private void validateStockAvailability(int totalStockCount, Integer orderQuantity) {
@@ -88,7 +90,7 @@ public class Inventory {
         int applicablePromotionQuantity = calculateApplicablePromotionQuantity(product, stockCount);
 
         // 프로모션이 적용 가능한 수량을 orderResult에 추가하고, 재고에서 차감
-        if (applicablePromotionQuantity > 0) {
+        if (applicablePromotionQuantity > ZERO) {
             int promotionAppliedQuantity = Math.min(applicablePromotionQuantity, remainingQuantity);
             orderResult.put(product, promotionAppliedQuantity);
             reduceStock(promotionStock, product, promotionAppliedQuantity);
@@ -96,7 +98,7 @@ public class Inventory {
         }
 
         // 남아 있는 수량을 nonPromotionResult에 추가하되, 재고가 충분한 범위 내에서 차감
-        if (remainingQuantity > 0) {
+        if (remainingQuantity > ZERO) {
             int nonPromotionApplicableQuantity = Math.min(stockCount - applicablePromotionQuantity, remainingQuantity);
             nonPromotionResult.put(product, nonPromotionApplicableQuantity);
             reduceStock(promotionStock, product, nonPromotionApplicableQuantity);
@@ -108,14 +110,14 @@ public class Inventory {
 
     private int calculateApplicablePromotionQuantity(Product product, Integer stockCount) {
         if (!product.hasPromotion()){
-            return 0;
+            return ZERO;
         }
         int promotionCount = product.getPromotion().countPromotionAmount(stockCount);
         return Math.min(promotionCount, stockCount);
     }
 
     private void processOrderInStandardStock(Order order, int remainingQuantity, Map<Product, Integer> orderResult) {
-        if (remainingQuantity > 0) {
+        if (remainingQuantity > ZERO) {
             processStock(order, orderResult, standardStock, remainingQuantity);
         }
     }
@@ -127,7 +129,7 @@ public class Inventory {
         if (stockCount >= remainingQuantity) {
             orderResult.put(product, remainingQuantity);
             reduceStock(stock, product, remainingQuantity);
-            return 0;
+            return ZERO;
         }
 
         orderResult.put(product, stockCount);
@@ -152,8 +154,8 @@ public class Inventory {
             throw new IllegalArgumentException(ErrorMessage.NON_EXIST_PRODUCT);
         }
 
-        return standardStock.getOrDefault(productInStandardStock, 0) +
-                promotionStock.getOrDefault(productInPromotionStock, 0);
+        return standardStock.getOrDefault(productInStandardStock, ZERO) +
+                promotionStock.getOrDefault(productInPromotionStock, ZERO);
     }
 
     private void reduceStock(Map<Product, Integer> stock, Product product, int quantity) {
@@ -162,7 +164,7 @@ public class Inventory {
     }
 
     private int getCurrentStock(Map<Product, Integer> stock, Product product, int quantity) {
-        int currentStock = stock.getOrDefault(product, 0);
+        int currentStock = stock.getOrDefault(product, ZERO);
         validateStockAvailability(currentStock, quantity);
         return currentStock;
     }

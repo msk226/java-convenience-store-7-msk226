@@ -9,6 +9,8 @@ import java.time.LocalDate;
 
 public class Promotion {
 
+    private static final Integer ZERO = 0;
+
     private final String name;
     private final Integer buyAmount;
     private final Integer getAmount;
@@ -38,7 +40,7 @@ public class Promotion {
 
     public int calculateDiscount(int quantity, int unitPrice, LocalDate orderDate){
         if (orderDate.isBefore(startDate) || orderDate.isAfter(endDate)){
-            return 0;
+            return ZERO;
         }
         int discountQuantity = (quantity / (buyAmount + getAmount)) * getAmount;
         return discountQuantity * unitPrice;
@@ -51,13 +53,13 @@ public class Promotion {
     }
 
     private void validatePromotionBuy(Integer buyAmount){
-        if (buyAmount < 0) {
+        if (buyAmount < ZERO) {
             throw new IllegalArgumentException(PROMOTION_BUY_AMOUNT_GREATER_THAN_ZERO);
         }
     }
 
     private void validatePromotionGet(Integer getAmount){
-        if (getAmount < 0) {
+        if (getAmount < ZERO) {
             throw new IllegalArgumentException(PROMOTION_GET_AMOUNT_GREATER_THAN_ZERO);
         }
     }

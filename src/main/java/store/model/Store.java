@@ -10,6 +10,8 @@ import store.utils.message.ErrorMessage;
 
 public class Store {
 
+
+    private static final Integer ZERO = 0;
     private final Inventory inventory;
     private Map<Product, Integer> orderResult;
 
@@ -40,7 +42,7 @@ public class Store {
     }
 
     public int calculateTotalAmount(Map<Product, Integer> orderResult) {
-        int totalAmount = 0;
+        int totalAmount = ZERO;
         Set<Product> products = orderResult.keySet();
         for (Product product : products){
             totalAmount += product.getPrice() * orderResult.get(product);
@@ -49,7 +51,7 @@ public class Store {
     }
 
     public int calculateDiscountAmount(Map<Product, Integer> orderResult, LocalDate orderDate) {
-        int totalDiscountAmount = 0;
+        int totalDiscountAmount = ZERO;
         Set<Product> products = orderResult.keySet();
         for (Product product : products){
             Promotion promotion = product.getPromotion();

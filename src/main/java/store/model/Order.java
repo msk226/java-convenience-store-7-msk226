@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 public class Order {
 
+    private static final Integer ZERO = 0;
     private final String productName;
     private final Integer quantity;
     private final LocalDate orderDate;
@@ -33,7 +34,7 @@ public class Order {
     }
 
     private void validateOrderQuantity(Integer quantity){
-        if (quantity <= 0) {
+        if (quantity <= ZERO) {
             throw new IllegalArgumentException(ORDER_QUANTITY_GREATER_THAN_ZERO);
         }
     }

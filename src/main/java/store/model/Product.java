@@ -1,6 +1,9 @@
 package store.model;
 
 public class Product {
+
+    private static final Integer ZERO = 0;
+
     private final String name;
     private final Integer price;
     private final Promotion promotion;
@@ -28,7 +31,7 @@ public class Product {
         return promotion;
     }
     private void validatePrice(Integer price){
-        if (price <= 0){
+        if (price <= ZERO){
             throw new IllegalArgumentException("[ERROR] 상품의 가격은 항상 0보다 커야 합니다.");
         }
     }
