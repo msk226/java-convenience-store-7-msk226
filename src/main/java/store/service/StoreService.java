@@ -44,10 +44,6 @@ public class StoreService {
         store.getFreeItem(orderResult, product, FREE_ITEM);
     }
 
-    public int countPromotionDiscount(Product product, Integer quantity){
-        return product.getPromotion().countPromotionAmount(quantity);
-    }
-
     public int getTotalAmount(OrderResult orderResult){
         Map<Product, Integer> orderedProducts = orderResult.getOrderedProducts();
         Set<Product> products = orderedProducts.keySet();
