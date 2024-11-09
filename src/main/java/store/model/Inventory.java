@@ -7,12 +7,16 @@ import java.util.Set;
 import store.utils.message.ErrorMessage;
 
 public class Inventory {
+
     private static final Integer ZERO = 0;
     private static final Integer FREE_ITEM = 1;
 
     private final Map<Product, Integer> standardStock = new HashMap<>();
     private final Map<Product, Integer> promotionStock = new HashMap<>();
 
+
+    /* -------------------------------------------------------------------------------------------------------------------*/
+    // 재고 채우기
     public void addProducts(Map<Product, Integer> newProducts){
         Set<Product> products = newProducts.keySet();
         for (Product product : products){
@@ -26,6 +30,7 @@ public class Inventory {
         }
     }
 
+    // 주문이 가능한지 판단하는 메서드,
     public void checkOrderIsPossible(List<Order> orders) {
         for (Order order : orders){
             int totalStockCount = getTotalStockCount(order.getProductName());
@@ -33,6 +38,7 @@ public class Inventory {
         }
     }
 
+    // 상품의 가격을 가져오는 메서드
     public Integer getPrice(String productName) {
         Product productByNameInStock = findProductByNameInStock(standardStock, productName);
         if (productByNameInStock != null) {
@@ -47,6 +53,7 @@ public class Inventory {
     }
 
 
+    // 주문 처리 로직
     public Map<Product, Integer> retrieveProductForOrder(List<Order> orders) {
         Map<Product, Integer> orderResult = new HashMap<>();
         Map<Product, Integer> nonPromotionResult = new HashMap<>();
@@ -71,6 +78,8 @@ public class Inventory {
         return orderResult;
     }
 
+
+
     public boolean isEligibleFreeItems(Product product, Integer orderAmount){
         Integer buyAmount = product.getPromotion().getBuyAmount();
         Integer getAmount = product.getPromotion().getGetAmount();
@@ -79,12 +88,13 @@ public class Inventory {
         return stock >= (orderAmount / (buyAmount + getAmount));
     }
 
-    public Map<Product, Integer> giveFreeItem(Map<Product, Integer> orderResult, Product product, Integer quantity){
+
+    // 수령 하지 않은 프로모션 아이템 제공
+    public OrderResult giveFreeItem(OrderResult orderResult, Product product, Integer quantity){
         reduceStock(promotionStock, product, quantity);
-        orderResult.put(product, orderResult.get(product) + FREE_ITEM);
+        orderResult.updateOrderedProducts(product, FREE_ITEM);
         return orderResult;
     }
-
 
     /*-----------------------------------------------------------------------------------------------------------------*/
 

@@ -7,6 +7,7 @@ import java.time.LocalDate;
 public class Order {
 
     private static final Integer ZERO = 0;
+
     private final String productName;
     private final Integer quantity;
     private final LocalDate orderDate;
@@ -17,6 +18,10 @@ public class Order {
         this.quantity = quantity;
         this.orderDate = LocalDate.now();
     }
+
+
+    /* -------------------------------------------------------------------------------------------------------------------*/
+
     public String getProductName() {
         return productName;
     }
@@ -24,10 +29,13 @@ public class Order {
     public LocalDate getOrderDate() {
         return orderDate;
     }
+
     public Integer getQuantity() {
         return quantity;
     }
 
+
+    /* -------------------------------------------------------------------------------------------------------------------*/
 
     private void validateOrder(Integer quantity){
         validateOrderQuantity(quantity);

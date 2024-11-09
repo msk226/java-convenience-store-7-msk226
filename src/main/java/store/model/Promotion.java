@@ -26,6 +26,8 @@ public class Promotion {
         this.endDate = endDate;
     }
 
+    /* -------------------------------------------------------------------------------------------------------------------*/
+
     public boolean checkEligibleFreeItems(int quantity){
         return countEligibleFreeItems(quantity) == buyAmount;
     }
@@ -48,6 +50,9 @@ public class Promotion {
         int discountQuantity = (quantity / (buyAmount + getAmount)) * getAmount;
         return discountQuantity * unitPrice;
     }
+
+
+    /* -------------------------------------------------------------------------------------------------------------------*/
 
     private void validatePromotion(Integer buyAmount, Integer getAmount, LocalDate startDate, LocalDate endDate){
         validatePromotionBuy(buyAmount);
