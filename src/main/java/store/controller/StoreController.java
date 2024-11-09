@@ -4,11 +4,8 @@ import static store.utils.constant.ProductConstant.PRODUCT_FILE_PATH;
 import static store.utils.constant.PromotionConstant.PROMOTION_FILE_PATH;
 import static store.utils.message.ErrorMessage.*;
 import static store.utils.message.InputMessage.*;
-import static store.utils.message.OutputMessage.DIVISION;
-import static store.utils.message.OutputMessage.PROMOTION_DIVISION;
 import static store.utils.message.OutputMessage.WELCOME_MESSAGE;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,7 +15,6 @@ import store.converter.ProductConverter;
 import store.converter.PromotionConverter;
 import store.model.*;
 import store.service.StoreService;
-import store.utils.message.InputMessage;
 import store.view.InputView;
 import store.view.OutputView;
 
@@ -64,11 +60,12 @@ public class StoreController {
     private void processOrder(Store store) {
         OutputView.printProducts(store.getProducts());
         OrderResult orderResult = createOrderResult(store);
-        List<Product> products = processDiscounts(store, orderResult);
+        processDiscounts(store, orderResult);
+
         int membershipDiscount = applyMembershipDiscount(orderResult);
 
         OutputView.printTotalQuantity(orderResult);
-        OutputView.printPromotionQuantity(products);
+        OutputView.printPromotionQuantity(orderResult);
         printAmounts(orderResult, membershipDiscount);
     }
 
@@ -89,24 +86,22 @@ public class StoreController {
         return storeService.processOrder(orders, store);
     }
 
-    private List<Product> processDiscounts(Store store, OrderResult orderResult) {
-        List<Product> freeItems = handleFreeItems(store, orderResult);
+    private void processDiscounts(Store store, OrderResult orderResult) {
+        handleFreeItems(store, orderResult);
         checkNonAppliedPromotions(orderResult);
 
-        return freeItems;
     }
 
-    private List<Product> handleFreeItems(Store store, OrderResult orderResult) {
+    private void handleFreeItems(Store store, OrderResult orderResult) {
         List<Product> freeItems = storeService.checkEligibleFreeItems(store, orderResult);
         for (Product product : freeItems) {
             if (!promptFreeItemAddition(product, store, orderResult))
                 freeItems.remove(product);
         }
-        return freeItems;
     }
 
     private boolean promptFreeItemAddition(Product product, Store store, OrderResult orderResult) {
-        String input = InputView.input(String.format(PROMOTION_MESSAGE_TEMPLATE, product.getName(), 1));
+        String input = InputView.input(String.format(PROMOTION_MESSAGE_TEMPLATE, product.getName(), FREE_ITEM));
         if (input.equals(YES)) {
             storeService.getFreeItem(product, store, orderResult);
             return true;
@@ -117,21 +112,26 @@ public class StoreController {
     private void checkNonAppliedPromotions(OrderResult orderResult) {
         Set<Product> products = orderResult.getOrderedProducts().keySet();
         for (Product product : products) {
-            if (!product.hasPromotion() && orderResult.hasPromotionAppliedForProductName(product.getName())) {
+            if (product.hasPromotion() && orderResult.hasPromotionAppliedForProductName(product.getName())) {
                 promptPromotionAcceptance(product, orderResult);
             }
         }
     }
 
     private void promptPromotionAcceptance(Product product, OrderResult orderResult) {
-        String input = InputView.input(String.format(PROMOTION_IS_NOT_APPLY, product.getName(), orderResult.getQuantity(product)));
+
+        if (orderResult.calculatePromotionIsNotApplied(product) == ZERO){
+            return;
+        }
+
+        String input = InputView.input(String.format(PROMOTION_IS_NOT_APPLY, product.getName(), orderResult.calculatePromotionIsNotApplied(product)));
         if (!input.equals(YES)) {
             throw new IllegalArgumentException(STOP_SHOPPING);
         }
     }
 
     private int applyMembershipDiscount(OrderResult orderResult) {
-        if (isMembershipDiscountApplied()) {
+        if (isMembershipDiscountApplied() && orderResult.calculateDiscountAmount() == 0) {
             return storeService.getMembershipAmount(orderResult);
         }
         return ZERO;
