@@ -18,6 +18,9 @@ public class Store {
 
     /* -------------------------------------------------------------------------------------------------------------------*/
 
+    public Map<Product, Integer> getProducts(){
+        return inventory.getStock();
+    }
     public OrderResult processOrder(List<Order> orders){
         inventory.checkOrderIsPossible(orders);
         return new OrderResult(inventory.retrieveProductForOrder(orders));
