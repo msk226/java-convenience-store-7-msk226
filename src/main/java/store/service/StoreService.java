@@ -24,10 +24,6 @@ public class StoreService {
         return store.processOrder(orders);
     }
 
-    //TODO 멤버십 할인 적용 여부를 확인하기 위해 안내 문구를 출력한다.
-    //TODO 구매 상품 내역, 증정 상품 내역, 금액 정보를 출력한다. -> 얘도 거의 다 된 듯
-    //TODO 추가 구매 여부를 확인하기 위해 안내 문구를 출력한다. -> 얘도 금방 됨
-
     public List<Product> checkEligibleFreeItems(Store store){
         List<Product> promotionProduct = new ArrayList<>();
 
@@ -51,14 +47,22 @@ public class StoreService {
         return product.getPromotion().countPromotionAmount(quantity);
     }
 
+    public int getTotalAmount(List<Order> orders, Store store){
+        int totalAmount = 0;
+         for (Order order : orders){
+             totalAmount += store.getPrice(order.getProductName()) * order.getQuantity();
+         }
+         return totalAmount;
+    }
+
     public int getDiscountAmount(Map<Product, Integer> orderResult, Store store){
         return store.calculateDiscountAmount(orderResult, LocalDate.now());
     }
     public int getMembershipAmount(Map<Product, Integer> orderResult, Store store){
         return store.calculateMembershipAmount(orderResult);
     }
-    public int getTotalAmount(Map<Product, Integer> orderResult, Store store){
-        return store.calculateTotalAmount(orderResult);
+    public int getPayAmount(Map<Product, Integer> orderResult, Store store){
+        return store.calculateFinalAmount(orderResult, LocalDate.now());
     }
 
 }
