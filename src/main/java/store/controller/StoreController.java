@@ -15,6 +15,7 @@ import store.converter.ProductConverter;
 import store.converter.PromotionConverter;
 import store.model.Inventory;
 import store.model.Order;
+import store.model.OrderResult;
 import store.model.Product;
 import store.model.Promotion;
 import store.model.Store;
@@ -51,45 +52,41 @@ public class StoreController {
 
         String inputOrder = InputView.input(ORDER_MESSAGE);
         List<Order> orders = OrderConverter.convertToOrder(inputOrder);
-        storeService.processOrder(orders, store);
+        OrderResult orderResult = storeService.processOrder(orders, store);
 
-        Map<Product, Integer> orderResult = getFreeItem(store);
+        getFreeItem(store, orderResult);
         checkPromotionIsNotApplied(orderResult);
 
-        OutputView.printTotalQuantity(orders, store);
+        OutputView.printTotalQuantity(orderResult);
 
         getPromotionAmount(orderResult);
-        OutputView.printAmount(storeService.getTotalAmount(orders, store),
-                storeService.getDiscountAmount(orderResult, store),
-                storeService.getMembershipAmount(orderResult,store),
-                storeService.getPayAmount(orderResult, store)
-                );
 
+        OutputView.printAmount(storeService.getTotalAmount(orderResult),
+                storeService.getDiscountAmount(orderResult),
+                storeService.getMembershipAmount(orderResult),
+                storeService.getPayAmount(orderResult));
     }
 
     /*--------------------------------------------------------------------------------------------------------------*/
 
-    private Map<Product, Integer> getFreeItem(Store store){
-        List<Product> eligibleFreeItems = storeService.checkEligibleFreeItems(store);
-        Map<Product, Integer> orderResults = new HashMap<>();
-
+    private void getFreeItem(Store store, OrderResult orderResult){
+        List<Product> eligibleFreeItems = storeService.checkEligibleFreeItems(store, orderResult);
         for (Product product : eligibleFreeItems){
             String message = String.format(PROMOTION_MESSAGE_TEMPLATE, product.getName(), 1);
             String input = InputView.input(message);
             if (!input.equals(YES)){
                 continue;
             }
-            orderResults = storeService.getFreeItem(product, store);
+            storeService.getFreeItem(product, store, orderResult);
         }
-        return orderResults;
     }
 
-    private void checkPromotionIsNotApplied(Map<Product, Integer> orderResult){
-        Set<Product> products = orderResult.keySet();
+    private void checkPromotionIsNotApplied(OrderResult orderResult){
+        Set<Product> products = orderResult.getOrderedProducts().keySet();
         for (Product product : products){
             if (!product.hasPromotion()){
                 String input = InputView.input(
-                        String.format(PROMOTION_IS_NOT_APPLY, product.getName(), orderResult.get(product)));
+                        String.format(PROMOTION_IS_NOT_APPLY, product.getName(), orderResult.getQuantity(product)));
                 if (!input.equals(YES)){
                     return;
                 }
@@ -97,14 +94,20 @@ public class StoreController {
         }
     }
 
-    private void getPromotionAmount(Map<Product, Integer> orderResult){
-        Set<Product> products = orderResult.keySet();
+    private void getPromotionAmount(OrderResult orderResult){
+        Set<Product> products = orderResult.getOrderedProducts().keySet();
         System.out.println(PROMOTION_DIVISION);
         for (Product product : products){
             if (product.hasPromotion()){
-                int countPromotionDiscount = storeService.countPromotionDiscount(product, orderResult.get(product));
+                int countPromotionDiscount = storeService.countPromotionDiscount(product, orderResult.getQuantity(product));
                 OutputView.printPromotionQuantity(product.getName(), countPromotionDiscount);
             }
         }
     }
+
+    private void getMembershipDiscount(Store store){
+
+
+    }
+
 }
