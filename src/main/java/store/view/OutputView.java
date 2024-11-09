@@ -18,12 +18,25 @@ public class OutputView {
         System.out.println(WELCOME_MESSAGE);
     }
 
-    public static void printTotalAmount(List<Order> orders, Store store){
+    public static void printTotalQuantity(List<Order> orders, Store store){
         printReceiptWelcomeMessage();
         for (Order order : orders){
             System.out.println(String.format(PRODUCT_MESSAGE, order.getProductName(),
                     order.getQuantity(), store.getPrice(order.getProductName()) * order.getQuantity()));
         }
+    }
+
+    public static void printPromotionQuantity(String productName,int promotionQuantity){
+        System.out.printf(PROMOTION, productName, promotionQuantity);
+    }
+
+    public static void printAmount(int totalAmount, int discountAmount, int membershipAmount, int payAmount){
+        System.out.printf(TOTAL_AMOUNT, totalAmount);
+        System.out.printf(DISCOUNT_AMOUNT, discountAmount);
+        System.out.printf(MEMBERSHIP_AMOUNT, membershipAmount);
+        System.out.printf(PAY_AMOUNT, payAmount);
+        System.out.println(DIVISION);
+
     }
 
     public static void printProducts(Map<Product, Integer> products){
@@ -47,6 +60,7 @@ public class OutputView {
         DecimalFormat decimalFormat = new DecimalFormat(COUNT_FORMAT);
         return decimalFormat.format(price) + WON;
     }
+
     private static void printReceiptWelcomeMessage(){
         System.out.println(RECEIPT_WELCOME_MESSAGE);
         System.out.println(RECEIPT_TITLE_MESSAGE);

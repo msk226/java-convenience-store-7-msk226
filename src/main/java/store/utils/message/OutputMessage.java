@@ -13,4 +13,12 @@ public class OutputMessage {
     public static final String RECEIPT_TITLE_MESSAGE = "상품명\t\t수량\t금액";
     public static final String PRODUCT_MESSAGE = "%s\t\t%d\t%,d";
 
+    public static final String PROMOTION = "%s\t\t%d\n";
+
+    public static final String TOTAL_AMOUNT = "총구매액\t\t%d\t%,d\n";
+    public static final String DISCOUNT_AMOUNT = "행사할인\t\t-%,d\n";
+    public static final String MEMBERSHIP_AMOUNT = "멤버십할인\t\t-%,d\n";
+    public static final String PAY_AMOUNT = "내실돈\t\t\t%,d\n";
+
+    public static final String DIVISION = "====================================";
 }
