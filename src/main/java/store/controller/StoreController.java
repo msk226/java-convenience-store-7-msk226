@@ -20,6 +20,7 @@ import store.view.InputView;
 import store.view.OutputView;
 
 public class StoreController {
+    private static final Integer ZERO = 0;
 
     private final StoreService storeService;
 
@@ -44,7 +45,7 @@ public class StoreController {
     }
 
     private boolean retry() {
-        return InputView.input(RETRY_MESSAGE).equalsIgnoreCase("Y");
+        return InputView.input(RETRY_MESSAGE).equalsIgnoreCase(YES);
     }
 
 
@@ -122,7 +123,7 @@ public class StoreController {
         if (isMembershipDiscountApplied()) {
             return storeService.getMembershipAmount(orderResult);
         }
-        return 0;
+        return ZERO;
     }
 
     private boolean isMembershipDiscountApplied() {
