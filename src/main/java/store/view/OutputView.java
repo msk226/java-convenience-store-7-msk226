@@ -14,10 +14,14 @@ import store.model.Store;
 
 public class OutputView {
     private static final Integer ZERO = 0;
+    private static final Integer FREE_ITEM = 1;
+    private static final Integer MINUS = -1;
 
-    public static void printWelcomeMessage(){
-        System.out.println(WELCOME_MESSAGE);
+    public static void printMessage(String message){
+        System.out.println(message);
     }
+
+
 
     // 총합, 수량 출력
     public static void printTotalQuantity(OrderResult orderResult){
@@ -31,16 +35,19 @@ public class OutputView {
     }
 
     // 프로모션 적용 수량 출력
-    public static void printPromotionQuantity(String productName, int promotionQuantity){
-        System.out.printf(PROMOTION, productName, promotionQuantity);
+    public static void printPromotionQuantity(List<Product> products){
+        printMessage(PROMOTION_DIVISION);
+        for (Product product : products){
+            System.out.printf(PROMOTION, product.getName(), FREE_ITEM);
+        }
+        printMessage(DIVISION);
     }
 
     // 총 구매액, 행사할인, 멤버십 할인, 실제 결제액 출력
     public static void printAmount(int totalAmount, int discountAmount, int membershipAmount, int payAmount){
-        System.out.println(DIVISION);
         System.out.printf(TOTAL_AMOUNT, TOTAL_AMOUNT_LABEL, getFormattedPrice(totalAmount));
-        System.out.printf(DISCOUNT_AMOUNT, DISCOUNT_AMOUNT_LABEL, getFormattedPrice(discountAmount));
-        System.out.printf(MEMBERSHIP_AMOUNT, MEMBERSHIP_AMOUNT_LABEL, getFormattedPrice(membershipAmount));
+        System.out.printf(DISCOUNT_AMOUNT, DISCOUNT_AMOUNT_LABEL, getFormattedPrice(discountAmount * MINUS));
+        System.out.printf(MEMBERSHIP_AMOUNT, MEMBERSHIP_AMOUNT_LABEL, getFormattedPrice(membershipAmount * MINUS));
         System.out.printf(PAY_AMOUNT, PAY_AMOUNT_LABEL,getFormattedPrice(payAmount));
         System.out.println(DIVISION);
     }
