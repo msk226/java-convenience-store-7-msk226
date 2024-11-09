@@ -1,5 +1,6 @@
 package store.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,4 +46,19 @@ public class StoreService {
         Map<Product, Integer> orderResults = store.getOrderResult();
         return store.getFreeItem(orderResults, product, FREE_ITEM);
     }
+
+    public int countPromotionDiscount(Product product, Integer quantity){
+        return product.getPromotion().countPromotionAmount(quantity);
+    }
+
+    public int getDiscountAmount(Map<Product, Integer> orderResult, Store store){
+        return store.calculateDiscountAmount(orderResult, LocalDate.now());
+    }
+    public int getMembershipAmount(Map<Product, Integer> orderResult, Store store){
+        return store.calculateMembershipAmount(orderResult);
+    }
+    public int getTotalAmount(Map<Product, Integer> orderResult, Store store){
+        return store.calculateTotalAmount(orderResult);
+    }
+
 }
