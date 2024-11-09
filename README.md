@@ -33,6 +33,100 @@
         - OutputView.java
     - Application.java
 ````
+---
+# 클래스 역할과 책임
+
+## Controller
+
+### StoreController
+- InputView, OutputView를 통해 사용자 입력을 받고 출력하는 역할
+- 적절한 서비스 메서드를 호출하여 주문 및 결제 정보를 제공.
+- 비즈니스 로직을 통해 얻은 값을 OutputView를 통해 반환 
+
+---
+
+## Converter
+
+### OrderConverter
+- 입력 받은 주문을 객체로 변환.
+- 입력받은 주문 정보를 내부 모델인 `Order` 객체로 변환.
+
+### ProductConverter
+- `products.md` 에서 읽어온 정보를 받아 `Product` 객체로 변환.
+
+### PromotionConverter 
+- `promotions.md`에서 읽어온 정보를 받아 `Promotion` 객체로 변환 
+
+---
+
+## Model
+
+### Inventory
+- 상품의 재고를 조회하고, 재고를 차감하는 기능.
+- 프로모션과 관련된 재고 관리를 처리.
+
+### Order
+- 고객이 주문한 상품과 수량을 저장.
+- 주문에 대한 기본 정보 제공 (상품명, 수량 등).
+
+### OrderResult
+- 주문 후 결과를 처리 (가격 계산, 프로모션 적용 여부 등).
+- 최종 결제 금액과 할인 적용 금액 계산.
+
+### Product
+- 상품의 가격, 이름, 프로모션 정보를 관리.
+
+### Promotion
+- 프로모션의 조건과 적용 방법 정의.
+- 프로모션에 따른 증정품 로직 관리 
+
+### Store
+- 전체 재고 및 상품을 관리.
+- 주문을 입력 받아 `Inventory`에게 전달하고, 결과를 받는 역할
+
+---
+
+## Service
+### StoreService
+- 재고 및 주문과 관련된 주요 로직을 처리.
+- 프로모션 적용 여부 판단 및 할인 계산.
+- 결제 관련 서비스.
+
+---
+
+## Utils
+
+### OrderConstant
+- 주문 처리 시 필요한 상수들을 정의
+
+### ProductConstant
+- 입력 받은 상품 정보를 파싱하기 위한 상수들을 정의 
+
+### PromotionConstant
+- 입력 받은 프로모션 정보를 파싱하기 위한 상수들을 정의
+
+### ErrorMessage
+- 에러 발생 시 출력할 에러 메시지들을 정의.
+
+### InputMessage
+- 사용자에게 입력을 요청할 때, 출력할 메시지들을 상수로 정의.
+
+### OutputMessage
+- 최종 출력 메시지를 상수로 정의
+
+---
+## View
+### InputView
+- 사용자로부터 입력을 받는 메소드를 가지고 있는 클래스
+
+### OutputView
+- 사용자에게 출력을 하는 메소드를 가지고 있는 클래스
+
+---
+
+
+# 기능 명세서 
+
 ## 1. 입/출력 처리
 
 ### - **상품 입력**
