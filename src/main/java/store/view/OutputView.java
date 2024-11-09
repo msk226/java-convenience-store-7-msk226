@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import store.model.Order;
+import store.model.OrderResult;
 import store.model.Product;
 import store.model.Store;
 
@@ -17,11 +18,13 @@ public class OutputView {
     }
 
     // 총합, 수량 출력
-    public static void printTotalQuantity(List<Order> orders, Store store){
+    public static void printTotalQuantity(OrderResult orderResult){
         printReceiptWelcomeMessage();
-        for (Order order : orders){
-            int totalPrice = store.getPrice(order.getProductName()) * order.getQuantity();
-            System.out.printf(PRODUCT_MESSAGE, order.getProductName(), order.getQuantity(), totalPrice);
+        Map<Product, Integer> orderedProducts = orderResult.getOrderedProducts();
+        Set<Product> products = orderedProducts.keySet();
+        for (Product product : products){
+            int totalPrice = product.getPrice() * orderedProducts.get(product);
+            System.out.printf(PRODUCT_MESSAGE, product.getName(), orderResult.getQuantity(product), totalPrice);
         }
     }
 
