@@ -92,13 +92,25 @@ public class Inventory {
 
 
 
-    public boolean isEligibleFreeItems(Product product, Integer orderAmount){
+    public boolean isEligibleFreeItems(Product product, Integer orderAmount) {
+        Promotion promotion = product.getPromotion();
         Integer buyAmount = product.getPromotion().getBuyAmount();
         Integer getAmount = product.getPromotion().getGetAmount();
 
+        // 프로모션을 적용하려면 필요한 총 재고량
+        int totalRequiredStock = promotion.countPromotionAmount(orderAmount) * (buyAmount + getAmount);
+
+        // 잉여 주문량 처리 (주문량이 나누어떨어지지 않는 경우)
+        if (promotion.countEligibleFreeItems(orderAmount) != 0) {
+            totalRequiredStock += (promotion.countEligibleFreeItems(orderAmount));
+        }
+
         Integer stock = promotionStock.get(product);
-        return stock >= (orderAmount / (buyAmount + getAmount));
+
+        // 재고가 필요한 만큼 충분한지 확인
+        return stock >= totalRequiredStock;
     }
+
 
 
     // 수령 하지 않은 프로모션 아이템 제공
