@@ -9,6 +9,7 @@ import store.utils.message.ErrorMessage;
 public class Inventory {
     private static final Integer ZERO = 0;
     private static final Integer FREE_ITEM = 1;
+
     private final Map<Product, Integer> standardStock = new HashMap<>();
     private final Map<Product, Integer> promotionStock = new HashMap<>();
 
@@ -30,6 +31,19 @@ public class Inventory {
             int totalStockCount = getTotalStockCount(order.getProductName());
             validateStockAvailability(totalStockCount, order.getQuantity());
         }
+    }
+
+    public Integer getPrice(String productName) {
+        Product productByNameInStock = findProductByNameInStock(standardStock, productName);
+        if (productByNameInStock != null) {
+            return productByNameInStock.getPrice();
+        }
+
+        Product productByNameInPromotionStock = findProductByNameInStock(promotionStock, productName);
+        if (productByNameInPromotionStock != null) {
+            return productByNameInPromotionStock.getPrice();
+        }
+        return ZERO;
     }
 
 

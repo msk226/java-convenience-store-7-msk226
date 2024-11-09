@@ -19,10 +19,6 @@ public class Store {
         this.inventory = inventory;
         orderResult = new HashMap<>();
     }
-
-
-
-
     public Map<Product, Integer> processOrder(List<Order> orders){
         inventory.checkOrderIsPossible(orders);
         Map<Product, Integer> orderResult = inventory.retrieveProductForOrder(orders);
@@ -39,6 +35,10 @@ public class Store {
 
     public Map<Product, Integer> getFreeItem(Map<Product, Integer> orderResult, Product product, Integer quantity){
         return inventory.giveFreeItem(orderResult, product, quantity);
+    }
+
+    public int getPrice(String productName){
+       return inventory.getPrice(productName);
     }
 
     public int calculateTotalAmount(Map<Product, Integer> orderResult) {

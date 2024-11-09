@@ -47,19 +47,22 @@ public class StoreController {
         return store;
     }
 
-    public void getOrder(Store store){
+    public void processOrder(Store store){
 
         String inputOrder = InputView.input(ORDER_MESSAGE);
         List<Order> orders = OrderConverter.convertToOrder(inputOrder);
         storeService.processOrder(orders, store);
 
         Map<Product, Integer> orderResult = getFreeItem(store);
-        checkPromotionIsNotApplied(store.getOrderResult());
+        checkPromotionIsNotApplied(orderResult);
 
-        OutputView.printProducts(orderResult);
+
+        OutputView.printTotalAmount(orders, store);
     }
 
-    private Map<Product, Integer> getFreeItem (Store store){
+    /*--------------------------------------------------------------------------------------------------------------*/
+
+    private Map<Product, Integer> getFreeItem(Store store){
         List<Product> eligibleFreeItems = storeService.checkEligibleFreeItems(store);
         Map<Product, Integer> orderResults = new HashMap<>();
 

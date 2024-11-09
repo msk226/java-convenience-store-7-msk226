@@ -7,13 +7,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import store.model.Inventory;
+import store.model.Order;
 import store.model.Product;
+import store.model.Store;
 import store.utils.message.OutputMessage;
 
 public class OutputView {
 
     public static void printWelcomeMessage(){
         System.out.println(WELCOME_MESSAGE);
+    }
+
+    public static void printTotalAmount(List<Order> orders, Store store){
+        printReceiptWelcomeMessage();
+        for (Order order : orders){
+            System.out.println(String.format(PRODUCT_MESSAGE, order.getProductName(),
+                    order.getQuantity(), store.getPrice(order.getProductName()) * order.getQuantity()));
+        }
     }
 
     public static void printProducts(Map<Product, Integer> products){
@@ -36,6 +46,10 @@ public class OutputView {
     private static String getFormattedPrice(Integer price){
         DecimalFormat decimalFormat = new DecimalFormat(COUNT_FORMAT);
         return decimalFormat.format(price) + WON;
+    }
+    private static void printReceiptWelcomeMessage(){
+        System.out.println(RECEIPT_WELCOME_MESSAGE);
+        System.out.println(RECEIPT_TITLE_MESSAGE);
     }
 
 }
