@@ -43,7 +43,6 @@ public class StoreController {
 
         Store store = storeService.initializeStore(products);
         OutputView.printProducts(products);
-
         return store;
     }
 
@@ -56,8 +55,10 @@ public class StoreController {
         Map<Product, Integer> orderResult = getFreeItem(store);
         checkPromotionIsNotApplied(orderResult);
 
+        OutputView.printTotalQuantity(orders, store);
 
-        OutputView.printTotalAmount(orders, store);
+        getPromotionAmount(orderResult);
+
     }
 
     /*--------------------------------------------------------------------------------------------------------------*/
@@ -89,5 +90,14 @@ public class StoreController {
             }
         }
     }
-    
+
+    private void getPromotionAmount(Map<Product, Integer> orderResult){
+        Set<Product> products = orderResult.keySet();
+        for (Product product : products){
+            if (product.hasPromotion()){
+                int countPromotionDiscount = storeService.countPromotionDiscount(product, orderResult.get(product));
+                OutputView.printPromotionQuantity(product.getName(), countPromotionDiscount);
+            }
+        }
+    }
 }
