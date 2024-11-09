@@ -5,6 +5,7 @@ import static store.utils.message.OutputMessage.*;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import store.model.Order;
 import store.model.OrderResult;
@@ -12,6 +13,7 @@ import store.model.Product;
 import store.model.Store;
 
 public class OutputView {
+    private static final Integer ZERO = 0;
 
     public static void printWelcomeMessage(){
         System.out.println(WELCOME_MESSAGE);
@@ -47,12 +49,18 @@ public class OutputView {
         Set<Product> productsKeys = products.keySet();
         for (Product product : productsKeys){
             String promotionName = DEFAULT_PROMOTION_NAME;
+
             if (product.hasPromotion()) {
                 promotionName = product.getPromotion().getName();
             }
+            String stock = EMPTY;
+            if (products.get(product) != ZERO){
+                stock = products.get(product) + COUNT;
+            }
+
             System.out.println(PREFIX + product.getName() + TAB +
                     getFormattedPrice(product.getPrice()) + WON + TAB +
-                    products.get(product) + COUNT + TAB +
+                    stock + TAB +
                     promotionName);
         }
         System.out.println(BLANK);

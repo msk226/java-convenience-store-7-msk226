@@ -5,10 +5,11 @@ public class OutputMessage {
     // 각 출력에 대한 상수들
     public static final String PREFIX = "- ";
     public static final String BLANK = " ";
-    public static final String TAB = ", ";
+    public static final String TAB = " ";
     public static final String COUNT = "개";
     public static final String WON = "원";
-    public static final String DEFAULT_PROMOTION_NAME = "null";
+    public static final String EMPTY =  "재고 없음";
+    public static final String DEFAULT_PROMOTION_NAME = "";
     public static final String COUNT_FORMAT = "#,###";
 
     // W편의점 환영 메시지
