@@ -22,10 +22,10 @@ import store.utils.message.ErrorMessage;
 
 public class PromotionConverter {
 
-    public static List<Promotion> convertToPromotion(List<String> inputPromotions){
+    public static List<Promotion> convertToPromotion(List<String> inputPromotions) {
         List<Promotion> promotions = new ArrayList<>();
 
-        for (String inputPromotion : inputPromotions.subList(PROMOTION_TITLE_INDEX, inputPromotions.size())){
+        for (String inputPromotion : inputPromotions.subList(PROMOTION_TITLE_INDEX, inputPromotions.size())) {
             String[] input = parseInputPromotion(inputPromotion);
             Promotion promotion = createPromotion(input);
             promotions.add(promotion);

@@ -28,23 +28,24 @@ public class Promotion {
 
     /* -------------------------------------------------------------------------------------------------------------------*/
 
-    public boolean checkEligibleFreeItems(int quantity){
+    public boolean checkEligibleFreeItems(int quantity) {
         return countEligibleFreeItems(quantity) == buyAmount;
     }
 
-    public int countTotalPromotionAmount(int quantity){
+    public int countTotalPromotionAmount(int quantity) {
         return quantity / (buyAmount + getAmount) * (buyAmount + getAmount);
     }
-    public int countPromotionAmount(int quantity){
+
+    public int countPromotionAmount(int quantity) {
         return quantity / (buyAmount + getAmount);
     }
 
-    public int countEligibleFreeItems(int quantity){
+    public int countEligibleFreeItems(int quantity) {
         return quantity % (buyAmount + getAmount);
     }
 
-    public int calculateDiscount(int quantity, int unitPrice, LocalDate orderDate){
-        if (orderDate.isBefore(startDate) || orderDate.isAfter(endDate)){
+    public int calculateDiscount(int quantity, int unitPrice, LocalDate orderDate) {
+        if (orderDate.isBefore(startDate) || orderDate.isAfter(endDate)) {
             return ZERO;
         }
         int discountQuantity = (quantity / (buyAmount + getAmount)) * getAmount;
@@ -54,29 +55,30 @@ public class Promotion {
 
     /* -------------------------------------------------------------------------------------------------------------------*/
 
-    private void validatePromotion(Integer buyAmount, Integer getAmount, LocalDate startDate, LocalDate endDate){
+    private void validatePromotion(Integer buyAmount, Integer getAmount, LocalDate startDate, LocalDate endDate) {
         validatePromotionBuy(buyAmount);
         validatePromotionGet(getAmount);
         validatePromotionDate(startDate, endDate);
     }
 
-    private void validatePromotionBuy(Integer buyAmount){
+    private void validatePromotionBuy(Integer buyAmount) {
         if (buyAmount < ZERO) {
             throw new IllegalArgumentException(PROMOTION_BUY_AMOUNT_GREATER_THAN_ZERO);
         }
     }
 
-    private void validatePromotionGet(Integer getAmount){
+    private void validatePromotionGet(Integer getAmount) {
         if (getAmount < ZERO) {
             throw new IllegalArgumentException(PROMOTION_GET_AMOUNT_GREATER_THAN_ZERO);
         }
     }
 
-    private void validatePromotionDate(LocalDate startDate, LocalDate endDate){
+    private void validatePromotionDate(LocalDate startDate, LocalDate endDate) {
         if (startDate.isAfter(endDate)) {
             throw new IllegalArgumentException(INVALID_PROMOTION_DATE);
         }
     }
+
     public String getName() {
         return name;
     }

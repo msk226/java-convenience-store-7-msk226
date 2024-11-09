@@ -28,6 +28,7 @@ public class StoreController {
     public StoreController(StoreService storeService) {
         this.storeService = storeService;
     }
+
     public void openStoreAndProcessOrder() {
         Store store = openStore();
         while (true) {
@@ -126,11 +127,12 @@ public class StoreController {
 
     private void promptPromotionAcceptance(Product product, OrderResult orderResult) {
 
-        if (orderResult.calculatePromotionIsNotApplied(product) == ZERO){
+        if (orderResult.calculatePromotionIsNotApplied(product) == ZERO) {
             return;
         }
 
-        String input = InputView.input(String.format(PROMOTION_IS_NOT_APPLY, product.getName(), orderResult.calculatePromotionIsNotApplied(product)));
+        String input = InputView.input(String.format(PROMOTION_IS_NOT_APPLY, product.getName(),
+                orderResult.calculatePromotionIsNotApplied(product)));
         if (!input.equals(YES)) {
             throw new IllegalArgumentException(STOP_SHOPPING);
         }

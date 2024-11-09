@@ -8,7 +8,7 @@ public class OutputMessage {
     public static final String TAB = " ";
     public static final String COUNT = "개";
     public static final String WON = "원";
-    public static final String EMPTY =  "재고 없음";
+    public static final String EMPTY = "재고 없음";
     public static final String DEFAULT_PROMOTION_NAME = "";
     public static final String COUNT_FORMAT = "#,###";
 

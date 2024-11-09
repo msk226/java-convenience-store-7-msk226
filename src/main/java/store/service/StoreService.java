@@ -18,7 +18,7 @@ public class StoreService {
 
     private static final Integer FREE_ITEM = 1;
 
-    public Store initializeStore(Map<Product, Integer> products){
+    public Store initializeStore(Map<Product, Integer> products) {
         Inventory inventory = new Inventory();
         inventory.addProducts(products);
         return new Store(inventory);
@@ -28,39 +28,41 @@ public class StoreService {
         return store.processOrder(orders);
     }
 
-    public List<Product> checkEligibleFreeItems(Store store, OrderResult orderResult){
+    public List<Product> checkEligibleFreeItems(Store store, OrderResult orderResult) {
         List<Product> promotionProduct = new ArrayList<>();
 
         Set<Product> products = orderResult.getOrderedProducts().keySet();
-        for (Product product : products){
-            if (store.checkEligibleFreeItems(product, orderResult.getQuantity(product))){
+        for (Product product : products) {
+            if (store.checkEligibleFreeItems(product, orderResult.getQuantity(product))) {
                 promotionProduct.add(product);
             }
         }
         return promotionProduct;
     }
 
-    public void getFreeItem(Product product, Store store, OrderResult orderResult){
+    public void getFreeItem(Product product, Store store, OrderResult orderResult) {
         store.getFreeItem(orderResult, product, FREE_ITEM);
     }
 
-    public int getTotalAmount(OrderResult orderResult){
+    public int getTotalAmount(OrderResult orderResult) {
         Map<Product, Integer> orderedProducts = orderResult.getOrderedProducts();
         Set<Product> products = orderedProducts.keySet();
         int totalPrice = 0;
-        for (Product product : products){
+        for (Product product : products) {
             totalPrice += product.getPrice() * orderedProducts.get(product);
         }
         return totalPrice;
     }
 
-    public int getDiscountAmount(OrderResult orderResult){
+    public int getDiscountAmount(OrderResult orderResult) {
         return orderResult.calculateDiscountAmount();
     }
-    public int getMembershipAmount(OrderResult orderResult){
+
+    public int getMembershipAmount(OrderResult orderResult) {
         return orderResult.calculateMembershipAmount();
     }
-    public int getPayAmount(OrderResult orderResult, Integer membershipDiscount){
+
+    public int getPayAmount(OrderResult orderResult, Integer membershipDiscount) {
         return orderResult.calculateFinalAmount(membershipDiscount);
     }
 

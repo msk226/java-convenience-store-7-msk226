@@ -18,27 +18,28 @@ public class Store {
 
     /* -------------------------------------------------------------------------------------------------------------------*/
 
-    public Map<Product, Integer> getProducts(){
+    public Map<Product, Integer> getProducts() {
         return inventory.getStock();
     }
-    public OrderResult processOrder(List<Order> orders){
+
+    public OrderResult processOrder(List<Order> orders) {
         inventory.checkOrderIsPossible(orders);
         return new OrderResult(inventory.retrieveProductForOrder(orders));
     }
 
-    public boolean checkEligibleFreeItems(Product product, Integer quantity){
-        if (!product.hasPromotion() || !inventory.isEligibleFreeItems(product, quantity)){
+    public boolean checkEligibleFreeItems(Product product, Integer quantity) {
+        if (!product.hasPromotion() || !inventory.isEligibleFreeItems(product, quantity)) {
             return false;
         }
         return product.getPromotion().checkEligibleFreeItems(quantity);
     }
 
-    public OrderResult getFreeItem(OrderResult orderResult, Product product, Integer quantity){
+    public OrderResult getFreeItem(OrderResult orderResult, Product product, Integer quantity) {
         return inventory.giveFreeItem(orderResult, product, quantity);
     }
 
-    public int getPrice(String productName){
-       return inventory.getPrice(productName);
+    public int getPrice(String productName) {
+        return inventory.getPrice(productName);
     }
 
     /* --------------------------------------------------------------------------------------------*/

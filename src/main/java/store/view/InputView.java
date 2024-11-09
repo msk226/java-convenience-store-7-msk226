@@ -9,12 +9,12 @@ import java.util.List;
 
 public class InputView {
 
-    public static String input(String message){
+    public static String input(String message) {
         System.out.println(message);
         return Console.readLine();
     }
 
-    public static List<String> inputData(String filePath){
+    public static List<String> inputData(String filePath) {
 
         try {
             List<String> inputPromotions = new ArrayList<>();
@@ -28,7 +28,7 @@ public class InputView {
     private static void readData(List<String> inputPromotions, String filePath) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
         String input;
-        while ((input = bufferedReader.readLine()) != null){
+        while ((input = bufferedReader.readLine()) != null) {
             inputPromotions.add(input);
         }
     }

@@ -8,14 +8,14 @@ public class Product {
     private final Integer price;
     private final Promotion promotion;
 
-    public Product(String name, Integer price, Promotion promotion){
+    public Product(String name, Integer price, Promotion promotion) {
         validatePrice(price);
         this.name = name;
         this.price = price;
         this.promotion = promotion;
     }
 
-    public boolean hasPromotion(){
+    public boolean hasPromotion() {
         return promotion != null;
     }
 
@@ -30,8 +30,9 @@ public class Product {
     public Promotion getPromotion() {
         return promotion;
     }
-    private void validatePrice(Integer price){
-        if (price <= ZERO){
+
+    private void validatePrice(Integer price) {
+        if (price <= ZERO) {
             throw new IllegalArgumentException("[ERROR] 상품의 가격은 항상 0보다 커야 합니다.");
         }
     }

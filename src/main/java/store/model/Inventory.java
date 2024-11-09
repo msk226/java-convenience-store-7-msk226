@@ -18,7 +18,7 @@ public class Inventory {
 
     /* -------------------------------------------------------------------------------------------------------------------*/
 
-    public Map<Product, Integer> getStock(){
+    public Map<Product, Integer> getStock() {
         Map<Product, Integer> combinedStock = new HashMap<>(standardStock);
 
         // 프로모션 재고가 있으면 기존 재고에 더하기
@@ -28,13 +28,14 @@ public class Inventory {
 
         return combinedStock;
     }
+
     // 재고 채우기
-    public void addProducts(Map<Product, Integer> newProducts){
+    public void addProducts(Map<Product, Integer> newProducts) {
         Set<Product> products = newProducts.keySet();
-        for (Product product : products){
+        for (Product product : products) {
             Integer quantity = newProducts.get(product);
 
-            if (product.hasPromotion()){
+            if (product.hasPromotion()) {
                 addStock(promotionStock, product, quantity);
                 continue;
             }
@@ -44,7 +45,7 @@ public class Inventory {
 
     // 주문이 가능한지 판단하는 메서드,
     public void checkOrderIsPossible(List<Order> orders) {
-        for (Order order : orders){
+        for (Order order : orders) {
             int totalStockCount = getTotalStockCount(order.getProductName());
             validateStockAvailability(totalStockCount, order.getQuantity());
         }
@@ -75,7 +76,8 @@ public class Inventory {
 
             // 프로모션 재고에서 먼저 차감
             if (findProductByNameInStock(promotionStock, order.getProductName()) != null) {
-                remainingQuantity = processStockWithPromotion(order, orderResult, nonPromotionResult, remainingQuantity);
+                remainingQuantity = processStockWithPromotion(order, orderResult, nonPromotionResult,
+                        remainingQuantity);
             }
 
             // 표준 재고에서 나머지 차감
@@ -89,7 +91,6 @@ public class Inventory {
 
         return orderResult;
     }
-
 
 
     public boolean isEligibleFreeItems(Product product, Integer orderAmount) {
@@ -112,9 +113,8 @@ public class Inventory {
     }
 
 
-
     // 수령 하지 않은 프로모션 아이템 제공
-    public OrderResult giveFreeItem(OrderResult orderResult, Product product, Integer quantity){
+    public OrderResult giveFreeItem(OrderResult orderResult, Product product, Integer quantity) {
         reduceStock(promotionStock, product, quantity);
         orderResult.updateOrderedProducts(product, FREE_ITEM);
         return orderResult;
@@ -131,7 +131,9 @@ public class Inventory {
             throw new IllegalArgumentException(ErrorMessage.NOT_ENOUGH_STOCK);
         }
     }
-    private int processStockWithPromotion(Order order, Map<Product, Integer> orderResult, Map<Product, Integer> nonPromotionResult, int remainingQuantity) {
+
+    private int processStockWithPromotion(Order order, Map<Product, Integer> orderResult,
+                                          Map<Product, Integer> nonPromotionResult, int remainingQuantity) {
         Product product = findProductByNameInStock(promotionStock, order.getProductName());
         Integer stockCount = promotionStock.get(product);
 
@@ -157,7 +159,7 @@ public class Inventory {
     }
 
     private int calculateApplicablePromotionQuantity(Product product, Integer stockCount) {
-        if (!product.hasPromotion()){
+        if (!product.hasPromotion()) {
             return ZERO;
         }
         int promotionCount = product.getPromotion().countTotalPromotionAmount(stockCount);
@@ -170,7 +172,8 @@ public class Inventory {
         }
     }
 
-    private int processStock(Order order, Map<Product, Integer> orderResult, Map<Product, Integer> stock, int remainingQuantity) {
+    private int processStock(Order order, Map<Product, Integer> orderResult, Map<Product, Integer> stock,
+                             int remainingQuantity) {
         Product product = findProductByNameInStock(stock, order.getProductName());
         Integer stockCount = stock.get(product);
 
@@ -198,7 +201,7 @@ public class Inventory {
         Product productInPromotionStock = findProductByNameInStock(promotionStock, productName);
         Product productInStandardStock = findProductByNameInStock(standardStock, productName);
 
-        if (productInPromotionStock == null && productInStandardStock == null){
+        if (productInPromotionStock == null && productInStandardStock == null) {
             throw new IllegalArgumentException(ErrorMessage.NON_EXIST_PRODUCT);
         }
 

@@ -23,16 +23,17 @@ public class OrderResult {
 
     /* -------------------------------------------------------------------------------------------------------------------*/
 
-    public Map<Product, Integer> updateOrderedProducts(Product product, Integer quantity){
+    public Map<Product, Integer> updateOrderedProducts(Product product, Integer quantity) {
         Integer existQuantity = orderedProducts.get(product);
         orderedProducts.put(product, existQuantity + quantity);
         return orderedProducts;
     }
+
     public Map<Product, Integer> getOrderedProducts() {
         return orderedProducts;
     }
 
-    public Integer getQuantity(Product product){
+    public Integer getQuantity(Product product) {
         return orderedProducts.getOrDefault(product, 0);
     }
 
@@ -49,7 +50,7 @@ public class OrderResult {
     public int calculateTotalAmount() {
         int totalAmount = ZERO;
         Set<Product> products = orderedProducts.keySet();
-        for (Product product : products){
+        for (Product product : products) {
             totalAmount += product.getPrice() * orderedProducts.get(product);
         }
         return totalAmount;
@@ -58,25 +59,26 @@ public class OrderResult {
     public int calculateDiscountAmount() {
         int totalDiscountAmount = ZERO;
         Set<Product> products = orderedProducts.keySet();
-        for (Product product : products){
+        for (Product product : products) {
             Promotion promotion = product.getPromotion();
             if (promotion != null) {
-                totalDiscountAmount += promotion.calculateDiscount(orderedProducts.get(product), product.getPrice(), orderDate);
+                totalDiscountAmount += promotion.calculateDiscount(orderedProducts.get(product), product.getPrice(),
+                        orderDate);
             }
         }
         return totalDiscountAmount;
     }
 
-    public int calculateMembershipAmount(){
+    public int calculateMembershipAmount() {
         int totalNonPromotedPrice = 0;
         Set<Product> products = orderedProducts.keySet();
-        for (Product product : products){
-            if (!product.hasPromotion() && !hasPromotionAppliedForProductName(product.getName())){
+        for (Product product : products) {
+            if (!product.hasPromotion() && !hasPromotionAppliedForProductName(product.getName())) {
                 totalNonPromotedPrice += product.getPrice() * orderedProducts.get(product);
             }
         }
         int membershipDiscountAmount = (int) (totalNonPromotedPrice * MEMBERSHIP);
-        if (membershipDiscountAmount >= MAX_DISCOUNT_AMOUNT){
+        if (membershipDiscountAmount >= MAX_DISCOUNT_AMOUNT) {
             return MAX_DISCOUNT_AMOUNT;
         }
         return membershipDiscountAmount;
@@ -86,19 +88,19 @@ public class OrderResult {
         return calculateTotalAmount() - (calculateDiscountAmount() + membershipDiscount);
     }
 
-    public int calculatePromotionBonusQuantity(Product product){
-        if (!product.hasPromotion()){
+    public int calculatePromotionBonusQuantity(Product product) {
+        if (!product.hasPromotion()) {
             return 0;
         }
         int quantity = orderedProducts.get(product);
         return product.getPromotion().countPromotionAmount(quantity);
     }
 
-    public int getQuantityByProductName(String productName){
+    public int getQuantityByProductName(String productName) {
         Set<Product> products = orderedProducts.keySet();
         int total = 0;
-        for (Product product : products){
-            if (product.getName().equals(productName)){
+        for (Product product : products) {
+            if (product.getName().equals(productName)) {
                 total += orderedProducts.get(product);
             }
         }
@@ -106,7 +108,7 @@ public class OrderResult {
     }
 
 
-    public int calculatePromotionIsNotApplied(Product product){
+    public int calculatePromotionIsNotApplied(Product product) {
         Promotion promotion = product.getPromotion();
 
         return getQuantityByProductName(product.getName()) - (calculatePromotionBonusQuantity(product)

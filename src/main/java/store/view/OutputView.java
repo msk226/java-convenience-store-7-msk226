@@ -18,10 +18,9 @@ public class OutputView {
     private static final Integer FREE_ITEM = 1;
     private static final Integer MINUS = -1;
 
-    public static void printMessage(String message){
+    public static void printMessage(String message) {
         System.out.println(message);
     }
-
 
 
     // 총합, 수량 출력
@@ -61,7 +60,8 @@ public class OutputView {
     }
 
     // 수량과 금액 출력
-    private static void printSummary(Map<String, Integer> totalQuantityByProduct, Map<String, Integer> totalPriceByProduct) {
+    private static void printSummary(Map<String, Integer> totalQuantityByProduct,
+                                     Map<String, Integer> totalPriceByProduct) {
         for (String productName : totalQuantityByProduct.keySet()) {
             int totalQuantity = totalQuantityByProduct.get(productName);
             int totalPrice = totalPriceByProduct.get(productName);
@@ -70,14 +70,13 @@ public class OutputView {
     }
 
 
-
     // 프로모션 적용 수량 출력
-    public static void printPromotionQuantity(OrderResult orderResult){
+    public static void printPromotionQuantity(OrderResult orderResult) {
         printMessage(PROMOTION_DIVISION);
         Map<Product, Integer> orderedProducts = orderResult.getOrderedProducts();
         Set<Product> products = orderedProducts.keySet();
-        for (Product product : products){
-            if (product.hasPromotion()){
+        for (Product product : products) {
+            if (product.hasPromotion()) {
                 System.out.printf(PROMOTION, product.getName(), orderResult.calculatePromotionBonusQuantity(product));
             }
         }
@@ -85,24 +84,24 @@ public class OutputView {
     }
 
     // 총 구매액, 행사할인, 멤버십 할인, 실제 결제액 출력
-    public static void printAmount(int totalAmount, int discountAmount, int membershipAmount, int payAmount){
+    public static void printAmount(int totalAmount, int discountAmount, int membershipAmount, int payAmount) {
         System.out.printf(TOTAL_AMOUNT, TOTAL_AMOUNT_LABEL, getFormattedPrice(totalAmount));
         System.out.printf(DISCOUNT_AMOUNT, DISCOUNT_AMOUNT_LABEL, getFormattedPrice(discountAmount * MINUS));
         System.out.printf(MEMBERSHIP_AMOUNT, MEMBERSHIP_AMOUNT_LABEL, getFormattedPrice(membershipAmount * MINUS));
-        System.out.printf(PAY_AMOUNT, PAY_AMOUNT_LABEL,getFormattedPrice(payAmount));
+        System.out.printf(PAY_AMOUNT, PAY_AMOUNT_LABEL, getFormattedPrice(payAmount));
         System.out.println(DIVISION);
     }
 
-    public static void printProducts(Map<Product, Integer> products){
+    public static void printProducts(Map<Product, Integer> products) {
         Set<Product> productsKeys = products.keySet();
-        for (Product product : productsKeys){
+        for (Product product : productsKeys) {
             String promotionName = DEFAULT_PROMOTION_NAME;
 
             if (product.hasPromotion()) {
                 promotionName = product.getPromotion().getName();
             }
             String stock = EMPTY;
-            if (products.get(product) != ZERO){
+            if (products.get(product) != ZERO) {
                 stock = products.get(product) + COUNT;
             }
 
@@ -116,13 +115,13 @@ public class OutputView {
 
 
     // 금액 포맷팅
-    private static String getFormattedPrice(Integer price){
+    private static String getFormattedPrice(Integer price) {
         DecimalFormat decimalFormat = new DecimalFormat(COUNT_FORMAT);
         return decimalFormat.format(price);
     }
 
     // 영수증 출력 헤더
-    private static void printReceiptWelcomeMessage(){
+    private static void printReceiptWelcomeMessage() {
         System.out.println(RECEIPT_WELCOME_MESSAGE);
         System.out.println(RECEIPT_TITLE_MESSAGE);
     }

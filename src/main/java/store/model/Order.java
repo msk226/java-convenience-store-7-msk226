@@ -12,7 +12,7 @@ public class Order {
     private final Integer quantity;
     private final LocalDate orderDate;
 
-    public Order(String productName, Integer quantity){
+    public Order(String productName, Integer quantity) {
         validateOrder(quantity);
         this.productName = productName;
         this.quantity = quantity;
@@ -37,11 +37,11 @@ public class Order {
 
     /* -------------------------------------------------------------------------------------------------------------------*/
 
-    private void validateOrder(Integer quantity){
+    private void validateOrder(Integer quantity) {
         validateOrderQuantity(quantity);
     }
 
-    private void validateOrderQuantity(Integer quantity){
+    private void validateOrderQuantity(Integer quantity) {
         if (quantity <= ZERO) {
             throw new IllegalArgumentException(ORDER_QUANTITY_GREATER_THAN_ZERO);
         }
