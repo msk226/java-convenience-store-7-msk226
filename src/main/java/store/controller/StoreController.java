@@ -26,20 +26,27 @@ public class StoreController {
     public StoreController(StoreService storeService) {
         this.storeService = storeService;
     }
-
     public void openStoreAndProcessOrder() {
         Store store = openStore();
         while (true) {
             try {
                 processOrder(store);
-                if (!InputView.input(RETRY_MESSAGE).equalsIgnoreCase("Y")) {
+                if (!retry()) {
                     break;
                 }
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
+                if (!retry()) {
+                    break;
+                }
             }
         }
     }
+
+    private boolean retry() {
+        return InputView.input(RETRY_MESSAGE).equalsIgnoreCase("Y");
+    }
+
 
     private Store openStore() {
         OutputView.printWelcomeMessage();
@@ -127,7 +134,7 @@ public class StoreController {
                 storeService.getTotalAmount(orderResult),
                 storeService.getDiscountAmount(orderResult),
                 membershipDiscount,
-                storeService.getPayAmount(orderResult)
+                storeService.getPayAmount(orderResult, membershipDiscount)
         );
     }
 }
