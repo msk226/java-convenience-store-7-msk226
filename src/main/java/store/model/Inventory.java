@@ -75,22 +75,38 @@ public class Inventory {
             int remainingQuantity = order.getQuantity();
 
             // 프로모션 재고에서 먼저 차감
-            if (findProductByNameInStock(promotionStock, order.getProductName()) != null) {
-                remainingQuantity = processStockWithPromotion(order, orderResult, nonPromotionResult,
-                        remainingQuantity);
-            }
+            remainingQuantity = processPromotionStock(order, orderResult, nonPromotionResult, remainingQuantity);
 
             // 표준 재고에서 나머지 차감
             processOrderInStandardStock(order, remainingQuantity, orderResult);
         }
 
         // nonPromotionResult에 있는 재고를 orderResult에 추가
-        for (Map.Entry<Product, Integer> entry : nonPromotionResult.entrySet()) {
-            orderResult.put(entry.getKey(), orderResult.getOrDefault(entry.getKey(), ZERO) + entry.getValue());
-        }
+        addNonPromotionStockToOrderResult(nonPromotionResult, orderResult);
 
         return orderResult;
     }
+
+    // 프로모션 재고에서 차감하는 메서드
+    private int processPromotionStock(Order order, Map<Product, Integer> orderResult,
+                                      Map<Product, Integer> nonPromotionResult, int remainingQuantity) {
+        // 프로모션 재고가 존재하는지 확인
+        Product promotionProduct = findProductByNameInStock(promotionStock, order.getProductName());
+        if (promotionProduct != null) {
+            remainingQuantity = processStockWithPromotion(order, orderResult, nonPromotionResult, remainingQuantity);
+        }
+        return remainingQuantity;
+    }
+
+
+    // nonPromotionResult에 있는 재고를 orderResult에 추가하는 메서드
+    private void addNonPromotionStockToOrderResult(Map<Product, Integer> nonPromotionResult,
+                                                   Map<Product, Integer> orderResult) {
+        for (Map.Entry<Product, Integer> entry : nonPromotionResult.entrySet()) {
+            orderResult.put(entry.getKey(), orderResult.getOrDefault(entry.getKey(), ZERO) + entry.getValue());
+        }
+    }
+
 
 
     public boolean isEligibleFreeItems(Product product, Integer orderAmount) {
@@ -132,31 +148,52 @@ public class Inventory {
         }
     }
 
+    // 프로모션 재고 처리 메서드
     private int processStockWithPromotion(Order order, Map<Product, Integer> orderResult,
                                           Map<Product, Integer> nonPromotionResult, int remainingQuantity) {
         Product product = findProductByNameInStock(promotionStock, order.getProductName());
         Integer stockCount = promotionStock.get(product);
 
+        // 프로모션이 적용 가능한 수량을 계산
         int applicablePromotionQuantity = calculateApplicablePromotionQuantity(product, stockCount);
 
-        // 프로모션이 적용 가능한 수량을 orderResult에 추가하고, 재고에서 차감
+        // 프로모션이 적용 가능한 수량을 처리
+        remainingQuantity = processPromotionStock(order, orderResult, product, applicablePromotionQuantity, remainingQuantity);
+
+        // 남은 수량을 비프로모션 재고로 처리
+        if (remainingQuantity > ZERO) {
+            remainingQuantity = processNonPromotionStock(nonPromotionResult, product, stockCount, applicablePromotionQuantity, remainingQuantity);
+        }
+
+        return remainingQuantity;
+    }
+
+    // 프로모션 재고에서 적용 가능한 수량을 처리하는 메서드
+    private int processPromotionStock(Order order, Map<Product, Integer> orderResult,
+                                      Product product, int applicablePromotionQuantity, int remainingQuantity) {
+        // 프로모션 수량을 주문 결과에 추가하고, 재고에서 차감
         if (applicablePromotionQuantity > ZERO) {
             int promotionAppliedQuantity = Math.min(applicablePromotionQuantity, remainingQuantity);
             orderResult.put(product, promotionAppliedQuantity);
             reduceStock(promotionStock, product, promotionAppliedQuantity);
             remainingQuantity -= promotionAppliedQuantity;
         }
+        return remainingQuantity;
+    }
 
-        // 남아 있는 수량을 nonPromotionResult에 추가하되, 재고가 충분한 범위 내에서 차감
+    // 비프로모션 재고를 처리하는 메서드
+    private int processNonPromotionStock(Map<Product, Integer> nonPromotionResult, Product product,
+                                         Integer stockCount, int applicablePromotionQuantity, int remainingQuantity) {
+        // 비프로모션 수량을 처리
         if (remainingQuantity > ZERO) {
             int nonPromotionApplicableQuantity = Math.min(stockCount - applicablePromotionQuantity, remainingQuantity);
             nonPromotionResult.put(product, nonPromotionApplicableQuantity);
             reduceStock(promotionStock, product, nonPromotionApplicableQuantity);
             remainingQuantity -= nonPromotionApplicableQuantity;
         }
-
         return remainingQuantity;
     }
+
 
     private int calculateApplicablePromotionQuantity(Product product, Integer stockCount) {
         if (!product.hasPromotion()) {
