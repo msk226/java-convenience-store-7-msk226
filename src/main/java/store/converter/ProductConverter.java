@@ -11,6 +11,7 @@ import static store.utils.message.ErrorMessage.INVALID_INPUT;
 import static store.utils.message.ErrorMessage.INVALID_PROMOTION_NAME;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import store.model.Product;
@@ -19,7 +20,7 @@ import store.model.Promotion;
 public class ProductConverter {
 
     public static Map<Product, Integer> convertToProduct(List<String> inputProducts, List<Promotion> promotions) {
-        Map<Product, Integer> products = new HashMap<>();
+        Map<Product, Integer> products = new LinkedHashMap<>();
         for (String inputProduct : inputProducts.subList(PROMOTION_TITLE_INDEX, inputProducts.size())) {
             String[] input = parseInputProduct(inputProduct);
             Product product = createProduct(input, promotions);
