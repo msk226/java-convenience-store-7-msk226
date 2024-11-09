@@ -27,8 +27,10 @@ public class StoreService {
     //TODO 구매 상품 내역, 증정 상품 내역, 금액 정보를 출력한다. -> 얘도 거의 다 된 듯
     //TODO 추가 구매 여부를 확인하기 위해 안내 문구를 출력한다. -> 얘도 금방 됨
 
-    public List<Product> checkEligibleFreeItems(Map<Product, Integer> orderResults, Store store){
+    public List<Product> checkEligibleFreeItems(Store store){
         List<Product> promotionProduct = new ArrayList<>();
+
+        Map<Product, Integer> orderResults = store.getOrderResult();
 
         Set<Product> products = orderResults.keySet();
         for (Product product : products){
@@ -39,7 +41,8 @@ public class StoreService {
         return promotionProduct;
     }
 
-    public Map<Product, Integer> getFreeItem(Map<Product, Integer> orderResult, Product product, Store store){
-        return store.getFreeItem(orderResult, product, 1);
+    public Map<Product, Integer> getFreeItem(Product product, Store store){
+        Map<Product, Integer> orderResults = store.getOrderResult();
+        return store.getFreeItem(orderResults, product, 1);
     }
 }

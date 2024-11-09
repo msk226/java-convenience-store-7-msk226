@@ -3,6 +3,7 @@ package store.controller;
 
 import static store.utils.message.InputMessage.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import store.converter.OrderConverter;
@@ -47,13 +48,14 @@ public class StoreController {
         List<Order> orders = OrderConverter.convertToOrder(inputOrder);
         Map<Product, Integer> productIntegerMap = storeService.processOrder(orders, store);
 
-        Map<Product, Integer> orderResult = getFreeItem(productIntegerMap, store);
+        Map<Product, Integer> orderResult = getFreeItem(store);
 
         OutputView.printProducts(orderResult);
     }
 
-    private Map<Product, Integer> getFreeItem(Map<Product, Integer> orderResults, Store store){
-        List<Product> eligibleFreeItems = storeService.checkEligibleFreeItems(orderResults, store);
+    private Map<Product, Integer> getFreeItem (Store store){
+        List<Product> eligibleFreeItems = storeService.checkEligibleFreeItems(store);
+        Map<Product, Integer> orderResults = new HashMap<>();
 
         for (Product product : eligibleFreeItems){
             String message = String.format(PROMOTION_MESSAGE_TEMPLATE, product.getName(), 1);
@@ -61,9 +63,13 @@ public class StoreController {
             if (!input.equals("Y")){
                 continue;
             }
-            storeService.getFreeItem(orderResults, product, store);
+            orderResults = storeService.getFreeItem(product, store);
         }
         return orderResults;
+    }
+
+    private void checkPromotionIsNotApplied(Map<Product, Integer> orderResult){
+
     }
     
 }
