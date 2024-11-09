@@ -65,8 +65,13 @@ public class OrderResult {
     }
 
     public int calculateMembershipAmount(){
-        int totalNonPromotedPrice = calculateTotalAmount() - calculateDiscountAmount();
-
+        int totalNonPromotedPrice = 0;
+        Set<Product> products = orderedProducts.keySet();
+        for (Product product : products){
+            if (!product.hasPromotion() && !hasPromotionAppliedForProductName(product.getName())){
+                totalNonPromotedPrice += product.getPrice() * orderedProducts.get(product);
+            }
+        }
         return (int) (totalNonPromotedPrice * MEMBERSHIP);
     }
 
