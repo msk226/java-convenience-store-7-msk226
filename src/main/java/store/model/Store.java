@@ -12,6 +12,7 @@ public class Store {
 
 
     private static final Integer ZERO = 0;
+    private static final Double MEMBERSHIP = 0.30;
     private final Inventory inventory;
     private Map<Product, Integer> orderResult;
 
@@ -60,6 +61,21 @@ public class Store {
             }
         }
         return totalDiscountAmount;
+    }
+
+    public int calculateMembershipAmount(Map<Product, Integer> orderResult){
+        int totalNonPromotedPrice = 0;
+
+        for (Map.Entry<Product, Integer> entry : orderResult.entrySet()) {
+            Product product = entry.getKey();
+            int quantity = entry.getValue();
+
+            if (product.getPromotion() == null) {
+                totalNonPromotedPrice += product.getPrice() * quantity;
+            }
+        }
+
+        return (int) (totalNonPromotedPrice * MEMBERSHIP);
     }
 
     public int calculateFinalAmount(Map<Product, Integer> orderResult, LocalDate orderDate) {
