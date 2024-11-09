@@ -72,10 +72,14 @@ public class OutputView {
 
 
     // 프로모션 적용 수량 출력
-    public static void printPromotionQuantity(List<Product> products){
+    public static void printPromotionQuantity(OrderResult orderResult){
         printMessage(PROMOTION_DIVISION);
+        Map<Product, Integer> orderedProducts = orderResult.getOrderedProducts();
+        Set<Product> products = orderedProducts.keySet();
         for (Product product : products){
-            System.out.printf(PROMOTION, product.getName(), FREE_ITEM * products.size());
+            if (product.hasPromotion()){
+                System.out.printf(PROMOTION, product.getName(), orderResult.calculatePromotionBonusQuantity(product));
+            }
         }
         printMessage(DIVISION);
     }
