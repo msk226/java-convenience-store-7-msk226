@@ -1,9 +1,12 @@
 package store.model;
 
+import static store.utils.constant.OrderConstant.*;
+
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import store.utils.constant.OrderConstant;
 
 public class OrderResult {
 
@@ -72,7 +75,11 @@ public class OrderResult {
                 totalNonPromotedPrice += product.getPrice() * orderedProducts.get(product);
             }
         }
-        return (int) (totalNonPromotedPrice * MEMBERSHIP);
+        int membershipDiscountAmount = (int) (totalNonPromotedPrice * MEMBERSHIP);
+        if (membershipDiscountAmount >= MAX_DISCOUNT_AMOUNT){
+            return MAX_DISCOUNT_AMOUNT;
+        }
+        return membershipDiscountAmount;
     }
 
     public int calculateFinalAmount(Integer membershipDiscount) {
