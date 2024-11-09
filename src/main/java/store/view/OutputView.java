@@ -105,12 +105,16 @@ public class OutputView {
                 stock = products.get(product) + COUNT;
             }
 
-            System.out.println(PREFIX + product.getName() + TAB +
-                    getFormattedPrice(product.getPrice()) + WON + TAB +
-                    stock + TAB +
-                    promotionName);
+            printProduct(product, stock, promotionName);
         }
         System.out.println(BLANK);
+    }
+
+    private static void printProduct(Product product, String stock, String promotionName) {
+        System.out.println(PREFIX + product.getName() + TAB +
+                getFormattedPrice(product.getPrice()) + WON + TAB +
+                stock + TAB +
+                promotionName);
     }
 
 
