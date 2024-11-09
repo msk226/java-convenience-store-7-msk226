@@ -31,6 +31,16 @@ public class OrderResult {
         return orderedProducts.getOrDefault(product, 0);
     }
 
+    public boolean hasPromotionAppliedForProductName(String productName) {
+        for (Product product : orderedProducts.keySet()) {
+            if (product.getName().equals(productName) && product.getPromotion() != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     public int calculateTotalAmount() {
         int totalAmount = ZERO;
         Set<Product> products = orderedProducts.keySet();
@@ -68,7 +78,7 @@ public class OrderResult {
     }
 
     public int calculateFinalAmount(LocalDate orderDate) {
-        return calculateTotalAmount() - calculateDiscountAmount(orderDate);
+        return calculateTotalAmount() - (calculateDiscountAmount(orderDate) + calculateMembershipAmount());
     }
 
     /* -------------------------------------------------------------------------------------------------------------------*/
