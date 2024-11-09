@@ -4,6 +4,7 @@ package store.controller;
 import static store.utils.constant.ProductConstant.PRODUCT_FILE_PATH;
 import static store.utils.constant.PromotionConstant.PROMOTION_FILE_PATH;
 import static store.utils.message.InputMessage.*;
+import static store.utils.message.OutputMessage.PROMOTION_DIVISION;
 
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +59,11 @@ public class StoreController {
         OutputView.printTotalQuantity(orders, store);
 
         getPromotionAmount(orderResult);
+        OutputView.printAmount(storeService.getTotalAmount(orders, store),
+                storeService.getDiscountAmount(orderResult, store),
+                storeService.getMembershipAmount(orderResult,store),
+                storeService.getPayAmount(orderResult, store)
+                );
 
     }
 
@@ -93,6 +99,7 @@ public class StoreController {
 
     private void getPromotionAmount(Map<Product, Integer> orderResult){
         Set<Product> products = orderResult.keySet();
+        System.out.println(PROMOTION_DIVISION);
         for (Product product : products){
             if (product.hasPromotion()){
                 int countPromotionDiscount = storeService.countPromotionDiscount(product, orderResult.get(product));
