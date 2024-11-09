@@ -50,7 +50,7 @@ public class PromotionConverter {
         try {
             return Integer.valueOf(input[BUY_AMOUNT_INDEX]);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid buy amount");
+            throw new IllegalArgumentException(INVALID_INPUT);
         }
     }
 
@@ -58,7 +58,7 @@ public class PromotionConverter {
         try {
             return Integer.valueOf(input[GET_AMOUNT_INDEX]);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid get amount");
+            throw new IllegalArgumentException(INVALID_INPUT);
         }
     }
 
@@ -66,7 +66,7 @@ public class PromotionConverter {
         try {
             return LocalDate.parse(input[START_DATE_INDEX], DateTimeFormatter.ofPattern(PROMOTION_DATE_FORMAT));
         } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Invalid start date format");
+            throw new IllegalArgumentException(INVALID_INPUT);
         }
     }
 
@@ -74,7 +74,7 @@ public class PromotionConverter {
         try {
             return LocalDate.parse(input[END_DATE_INDEX], DateTimeFormatter.ofPattern(PROMOTION_DATE_FORMAT));
         } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Invalid end date format");
+            throw new IllegalArgumentException(INVALID_INPUT);
         }
     }
 
