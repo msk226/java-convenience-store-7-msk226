@@ -2,6 +2,7 @@ package store.model;
 
 import static store.utils.constant.OrderConstant.*;
 
+import camp.nextstep.edu.missionutils.DateTimes;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +19,7 @@ public class OrderResult {
 
     public OrderResult(Map<Product, Integer> orderedProducts) {
         this.orderedProducts = orderedProducts;
-        this.orderDate = LocalDate.now();
+        this.orderDate = DateTimes.now().toLocalDate();
     }
 
     /* -------------------------------------------------------------------------------------------------------------------*/
