@@ -1,5 +1,7 @@
 package store.model;
 
+import store.utils.message.ErrorMessage;
+
 public class Product {
 
     private static final Integer ZERO = 0;
@@ -33,7 +35,7 @@ public class Product {
 
     private void validatePrice(Integer price) {
         if (price <= ZERO) {
-            throw new IllegalArgumentException("[ERROR] 상품의 가격은 항상 0보다 커야 합니다.");
+            throw new IllegalArgumentException(ErrorMessage.PRODUCT_PRICE_GREATER_THAN_ZERO);
         }
     }
 }
