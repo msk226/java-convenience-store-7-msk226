@@ -11,6 +11,7 @@ import store.utils.message.ErrorMessage;
 public class OrderConverter {
 
     public static List<Order> convertToOrder(String input) {
+        validateInput(input);
         List<Order> orders = new ArrayList<>();
         String[] inputOrders = splitOrders(input);
 
@@ -55,4 +56,35 @@ public class OrderConverter {
             throw new IllegalArgumentException(ErrorMessage.INVALID_INPUT);
         }
     }
+
+    private static void validateInput(String input) {
+        // 쉼표로 구분된 주문 항목들 분리
+        String[] items = splitOrders(input);
+
+        for (String item : items) {
+            // 각 항목이 대괄호로 둘러싸여 있는지 확인
+            if (!item.startsWith("[") || !item.endsWith("]")) {
+                throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER_INPUT);
+            }
+
+            // 대괄호를 제거하고 상품명과 수량 분리
+            String[] parts = extractProductAndQuantity(item);
+
+            // 상품명과 수량이 정확히 분리되었는지 확인
+            if (parts.length != 2 || parts[0].isEmpty() || !isNumeric(parts[1])) {
+                throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER_INPUT);
+            }
+        }
+    }
+
+    // 숫자 여부 확인
+    private static boolean isNumeric(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
 }

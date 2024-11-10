@@ -15,6 +15,7 @@ public class ErrorMessage {
     public static final String NON_EXIST_PRODUCT = "[ERROR] 존재하지 않는 상품입니다. 다시 입력해 주세요.";
 
     public static final String INVALID_PROMOTION_NAME = "[ERROR] 유효하지 않은 프로모션 이름입니다.";
+    public static final String INVALID_ORDER_INPUT = "[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.";
     public static final String INVALID_INPUT = "[ERROR] 잘못된 입력입니다. 다시 입력해 주세요.";
 
     public static final String STOP_SHOPPING = "[ERROR] 주문을 종료하셨습니다.";
