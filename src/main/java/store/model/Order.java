@@ -2,7 +2,9 @@ package store.model;
 
 import static store.utils.message.ErrorMessage.ORDER_QUANTITY_GREATER_THAN_ZERO;
 
+import camp.nextstep.edu.missionutils.DateTimes;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Order {
 
@@ -16,7 +18,7 @@ public class Order {
         validateOrder(quantity);
         this.productName = productName;
         this.quantity = quantity;
-        this.orderDate = LocalDate.now();
+        this.orderDate = DateTimes.now().toLocalDate();
     }
 
 

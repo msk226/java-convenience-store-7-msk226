@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import camp.nextstep.edu.missionutils.test.NsTest;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 
 public class PromotionTest {

@@ -38,9 +38,6 @@ public class Store {
         return inventory.giveFreeItem(orderResult, product, quantity);
     }
 
-    public int getPrice(String productName) {
-        return inventory.getPrice(productName);
-    }
 
     /* --------------------------------------------------------------------------------------------*/
 
