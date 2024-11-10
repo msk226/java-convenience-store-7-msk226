@@ -4,6 +4,7 @@ import static store.utils.constant.ProductConstant.PRODUCT_FILE_PATH;
 import static store.utils.constant.PromotionConstant.PROMOTION_FILE_PATH;
 import static store.utils.message.ErrorMessage.*;
 import static store.utils.message.InputMessage.*;
+import static store.utils.message.OutputMessage.DIVISION;
 import static store.utils.message.OutputMessage.WELCOME_MESSAGE;
 
 import java.util.Iterator;
@@ -150,6 +151,7 @@ public class StoreController {
     }
 
     private void printAmounts(OrderResult orderResult, Integer membershipDiscount) {
+
         OutputView.printAmount(
                 storeService.getTotalAmount(orderResult),
                 storeService.getDiscountAmount(orderResult),

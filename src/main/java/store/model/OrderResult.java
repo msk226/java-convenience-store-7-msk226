@@ -29,6 +29,16 @@ public class OrderResult {
         return orderedProducts;
     }
 
+    public boolean isPromotionApplied(){
+        Set<Product> products = orderedProducts.keySet();
+        for (Product product : products){
+            if (product.hasPromotion()){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Map<Product, Integer> getOrderedProducts() {
         return orderedProducts;
     }

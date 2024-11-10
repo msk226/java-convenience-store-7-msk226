@@ -72,6 +72,9 @@ public class OutputView {
 
     // 프로모션 적용 수량 출력
     public static void printPromotionQuantity(OrderResult orderResult) {
+        if (!orderResult.isPromotionApplied()){
+            return;
+        }
         printMessage(PROMOTION_DIVISION);
         Map<Product, Integer> orderedProducts = orderResult.getOrderedProducts();
         Set<Product> products = orderedProducts.keySet();
@@ -80,11 +83,11 @@ public class OutputView {
                 System.out.printf(PROMOTION, product.getName(), orderResult.calculatePromotionBonusQuantity(product));
             }
         }
-        printMessage(DIVISION);
     }
 
     // 총 구매액, 행사할인, 멤버십 할인, 실제 결제액 출력
     public static void printAmount(int totalAmount, int discountAmount, int membershipAmount, int payAmount) {
+        printMessage(DIVISION);
         System.out.printf(TOTAL_AMOUNT, TOTAL_AMOUNT_LABEL, getFormattedPrice(totalAmount));
         System.out.printf(DISCOUNT_AMOUNT, DISCOUNT_AMOUNT_LABEL, getFormattedPrice(discountAmount * MINUS));
         System.out.printf(MEMBERSHIP_AMOUNT, MEMBERSHIP_AMOUNT_LABEL, getFormattedPrice(membershipAmount * MINUS));
