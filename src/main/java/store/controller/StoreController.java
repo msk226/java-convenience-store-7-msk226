@@ -63,7 +63,6 @@ public class StoreController {
 
 
     private Store openStore() {
-        OutputView.printMessage(WELCOME_MESSAGE);
         List<Promotion> promotions = loadPromotions();
         Map<Product, Integer> products = loadProducts(promotions);
 
@@ -71,6 +70,7 @@ public class StoreController {
     }
 
     private void processOrder(Store store) {
+        OutputView.printMessage(WELCOME_MESSAGE);
         OutputView.printProducts(store.getProducts());
         OrderResult orderResult = createOrderResult(store);
         orderResult.initializeOrderResult();
