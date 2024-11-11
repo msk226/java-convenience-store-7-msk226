@@ -89,8 +89,8 @@ public class OutputView {
     public static void printAmount(int totalAmount, int discountAmount, int membershipAmount, int payAmount) {
         printMessage(DIVISION);
         System.out.printf(TOTAL_AMOUNT, TOTAL_AMOUNT_LABEL, getFormattedPrice(totalAmount));
-        System.out.printf(DISCOUNT_AMOUNT, DISCOUNT_AMOUNT_LABEL, getFormattedPrice(discountAmount * MINUS));
-        System.out.printf(MEMBERSHIP_AMOUNT, MEMBERSHIP_AMOUNT_LABEL, getFormattedPrice(membershipAmount * MINUS));
+        System.out.printf(DISCOUNT_AMOUNT, DISCOUNT_AMOUNT_LABEL, getFormattedPriceForDiscount(discountAmount));
+        System.out.printf(MEMBERSHIP_AMOUNT, MEMBERSHIP_AMOUNT_LABEL, getFormattedPriceForDiscount(membershipAmount));
         System.out.printf(PAY_AMOUNT, PAY_AMOUNT_LABEL, getFormattedPrice(payAmount));
         System.out.println(DIVISION);
     }
@@ -126,6 +126,16 @@ public class OutputView {
         DecimalFormat decimalFormat = new DecimalFormat(COUNT_FORMAT);
         return decimalFormat.format(price);
     }
+    public static String getFormattedPriceForDiscount(int amount) {
+        // 숫자가 0인 경우에도 -0으로 출력하도록 설정
+        if (amount == 0) {
+            return "-0";
+        }
+        // 숫자가 0이 아닌 경우 항상 '-' 기호를 붙이고 포맷팅
+        return String.format("-%s", String.format("%,d", Math.abs(amount)));
+    }
+
+
 
     // 영수증 출력 헤더
     private static void printReceiptWelcomeMessage() {

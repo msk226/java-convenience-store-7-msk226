@@ -33,7 +33,10 @@ public class OutputMessage {
     // 금액 출력 형식
     public static final String TOTAL_AMOUNT = "%-15s%20s\n";
     public static final String DISCOUNT_AMOUNT = "%-15s%20s\n";
-    public static final String MEMBERSHIP_AMOUNT = "%-15s%19s\n";
+    public static final String MEMBERSHIP_AMOUNT = "%-15s%20s\n";
+
+
+
     public static final String PAY_AMOUNT = "%-15s%20s\n";
 
     // 구분선
