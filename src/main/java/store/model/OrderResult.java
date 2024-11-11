@@ -118,6 +118,7 @@ public class OrderResult {
 
         }
         int membershipDiscountAmount = (int) (totalNonPromotedPrice * MEMBERSHIP);
+
         if (membershipDiscountAmount >= MAX_DISCOUNT_AMOUNT) {
             return MAX_DISCOUNT_AMOUNT;
         }
