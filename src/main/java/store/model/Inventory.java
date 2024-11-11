@@ -13,10 +13,29 @@ public class Inventory {
     private static final Integer FREE_ITEM = 1;
 
     private final Map<Product, Integer> standardStock = new LinkedHashMap<>();
+
     private final Map<Product, Integer> promotionStock = new LinkedHashMap<>();
 
 
     /* -------------------------------------------------------------------------------------------------------------------*/
+
+    // 프로모션 재고에서 구매하지 않은 수량을 원래 재고로 돌리는 메서드
+    public void returnUnpurchasedPromotionItems(Product product, int unpurchasedQuantity) {
+        if (product.hasPromotion()) {
+            addStock(promotionStock, product, unpurchasedQuantity);
+        } else {
+            addStock(standardStock, product, unpurchasedQuantity);
+        }
+    }
+
+    protected Map<Product, Integer> getPromotionStock() {
+        return promotionStock;
+    }
+
+    protected Map<Product, Integer> getStandardStock() {
+        return standardStock;
+    }
+
 
     public Map<Product, Integer> getStock() {
         Map<Product, Integer> combinedStock = new HashMap<>(standardStock);
@@ -138,7 +157,7 @@ public class Inventory {
 
     /*-----------------------------------------------------------------------------------------------------------------*/
 
-    private void addStock(Map<Product, Integer> stock, Product product, Integer quantity) {
+    protected void addStock(Map<Product, Integer> stock, Product product, Integer quantity) {
         stock.put(product, stock.getOrDefault(product, ZERO) + quantity);
     }
 

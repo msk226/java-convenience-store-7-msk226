@@ -40,6 +40,26 @@ public class OrderResult {
         return false;
     }
 
+    public Product findNonPromotionProductByProductName(String productName){
+        Set<Product> products = orderedProducts.keySet();
+        for (Product product : products){
+            if (product.getName().equals(productName) && !product.hasPromotion()){
+                return product;
+            }
+        }
+        return null;
+    }
+
+    public Product findPromotionProductByProductName(String productName){
+        Set<Product> products = orderedProducts.keySet();
+        for (Product product : products){
+            if (product.getName().equals(productName) && product.hasPromotion()){
+                return product;
+            }
+        }
+        return null;
+    }
+
     public Map<Product, Integer> getOrderedProducts() {
         return orderedProducts;
     }

@@ -3,8 +3,10 @@ package store.model;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import store.utils.message.ErrorMessage;
 
@@ -38,8 +40,46 @@ public class Store {
         return inventory.giveFreeItem(orderResult, product, quantity);
     }
 
+    public void removeIfNoFreeItem(Product removeProduct, OrderResult orderResult) {
+        int nonAppliedPromotionCount = orderResult.calculatePromotionIsNotApplied(removeProduct);
 
+        Product nonPromotionProductByProductName = orderResult.findNonPromotionProductByProductName(
+                removeProduct.getName());
+
+        Integer orderQuantity = orderResult.getOrderedProducts().get(nonPromotionProductByProductName);
+        int min = Math.min(orderQuantity, nonAppliedPromotionCount);
+        inventory.returnUnpurchasedPromotionItems(nonPromotionProductByProductName, min);
+        orderResult.updateOrderedProducts(nonPromotionProductByProductName, min * -1);
+        nonAppliedPromotionCount -= orderQuantity;
+
+        if (nonAppliedPromotionCount <= 0){
+            return;
+        }
+        Product promotionProduct = orderResult.findPromotionProductByProductName(removeProduct.getName());
+        inventory.returnUnpurchasedPromotionItems(promotionProduct, nonAppliedPromotionCount);
+        orderResult.updateOrderedProducts(promotionProduct, nonAppliedPromotionCount * -1);
+
+//
+//        Map<Product, Integer> orderedProducts = orderResult.getOrderedProducts();
+//        Set<Product> products = orderedProducts.keySet();
+//
+//        for (Product product : products){
+//            if (product.getName().equals(removeProduct.getName()) && !product.hasPromotion()){
+//                Integer orderQuantity = orderResult.getOrderedProducts().get(product);
+//                inventory.returnUnpurchasedPromotionItems(removeProduct, Math.min(orderQuantity, nonAppliedPromotionCount));
+//                nonAppliedPromotionCount -= orderQuantity;
+//
+//                if (nonAppliedPromotionCount <= 0) {
+//                    return;
+//                }
+//            }
+//            Product promotionProduct = orderResult.findPromotionProductByProductName(product.getName());
+//            inventory.returnUnpurchasedPromotionItems(promotionProduct, nonAppliedPromotionCount);
+//        }
+    }
     /* --------------------------------------------------------------------------------------------*/
 
+    // 0, 7
 
+    // 8, 7
 }
