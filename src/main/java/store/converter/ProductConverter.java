@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import store.model.Product;
 import store.model.Promotion;
+import store.utils.message.ErrorMessage;
 
 public class ProductConverter {
 
@@ -52,7 +53,7 @@ public class ProductConverter {
 
     private static void validateProductInput(String[] input) {
         if (input.length != PRODUCT_INPUT_LENGTH) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER_INPUT);
         }
     }
 
