@@ -18,6 +18,7 @@ import store.converter.ProductConverter;
 import store.converter.PromotionConverter;
 import store.model.*;
 import store.service.StoreService;
+import store.utils.message.ErrorMessage;
 import store.view.InputView;
 import store.view.OutputView;
 
@@ -56,6 +57,7 @@ public class StoreController {
                 if (input.equalsIgnoreCase(YES) || input.equalsIgnoreCase(NO)) {
                     return input.equalsIgnoreCase(YES);
                 }
+                OutputView.printMessage(INVALID_INPUT);
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage()); // 예외 메시지 출력
             }
