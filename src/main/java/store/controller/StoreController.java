@@ -41,9 +41,6 @@ public class StoreController {
                 }
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
-                if (!retry()) {
-                    break;
-                }
             }
         }
     }
@@ -51,6 +48,20 @@ public class StoreController {
     private boolean retry() {
         return InputView.input(RETRY_MESSAGE).equalsIgnoreCase(YES);
     }
+
+    private boolean retryInputWithException(String message) {
+        while (true) {
+            try {
+                String input = InputView.input(message);
+                if (input.equalsIgnoreCase(YES) || input.equalsIgnoreCase(NO)) {
+                    return input.equalsIgnoreCase(YES);
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage()); // 예외 메시지 출력
+            }
+        }
+    }
+
 
 
     private Store openStore() {
@@ -110,13 +121,11 @@ public class StoreController {
 
 
     private boolean promptFreeItemAddition(Product product, Store store, OrderResult orderResult) {
-        String input = InputView.input(String.format(PROMOTION_MESSAGE_TEMPLATE, product.getName(), FREE_ITEM));
-        if (input.equals(YES)) {
+        boolean addFreeItem = retryInputWithException(String.format(PROMOTION_MESSAGE_TEMPLATE, product.getName(), FREE_ITEM));
+        if (addFreeItem) {
             storeService.getFreeItem(product, store, orderResult);
-            return true;
         }
-        //storeService.removeIfNoFreeItem(product, orderResult);
-        return false;
+        return addFreeItem;
     }
 
     private void checkNonAppliedPromotions(Store store, OrderResult orderResult) {
@@ -136,16 +145,14 @@ public class StoreController {
             storeService.removeIfNoFreeItem(product, store, orderResult);
         }
     }
-
     private boolean promptPromotionAcceptance(Product product, OrderResult orderResult) {
         if (orderResult.calculatePromotionIsNotApplied(product) == ZERO) {
-            return true; // 삭제 필요 없음
+            return true;
         }
 
-        String input = InputView.input(String.format(PROMOTION_IS_NOT_APPLY, product.getName(),
-                orderResult.calculatePromotionIsNotApplied(product)));
-        return input.equals(YES);
+        return retryInputWithException(String.format(PROMOTION_IS_NOT_APPLY, product.getName(), orderResult.calculatePromotionIsNotApplied(product)));
     }
+
 
 
 
@@ -157,8 +164,9 @@ public class StoreController {
     }
 
     private boolean isMembershipDiscountApplied() {
-        return InputView.input(MEMBERSHIP_MESSAGE).equals(YES);
+        return retryInputWithException(MEMBERSHIP_MESSAGE);
     }
+
 
     private void printAmounts(OrderResult orderResult, Integer membershipDiscount) {
 
