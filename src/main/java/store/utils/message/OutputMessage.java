@@ -35,6 +35,9 @@ public class OutputMessage {
     public static final String DISCOUNT_AMOUNT = "%-15s%20s\n";
     public static final String MEMBERSHIP_AMOUNT = "%-15s%20s\n";
 
+    public static final String RESULT_ZERO = "-0";
+    public static final String STRING_FORMAT = "-%s";
+    public static final String INTEGER_FORMAT = "%,d";
 
 
     public static final String PAY_AMOUNT = "%-15s%20s\n";

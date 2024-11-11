@@ -127,11 +127,11 @@ public class OutputView {
     }
     public static String getFormattedPriceForDiscount(int amount) {
         // 숫자가 0인 경우에도 -0으로 출력하도록 설정
-        if (amount == 0) {
-            return "-0";
+        if (amount == ZERO) {
+            return RESULT_ZERO;
         }
         // 숫자가 0이 아닌 경우 항상 '-' 기호를 붙이고 포맷팅
-        return String.format("-%s", String.format("%,d", Math.abs(amount)));
+        return String.format(STRING_FORMAT, String.format(INTEGER_FORMAT, Math.abs(amount)));
     }
 
 
