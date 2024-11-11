@@ -46,6 +46,8 @@ public class Store {
         Product nonPromotionProductByProductName = orderResult.findNonPromotionProductByProductName(
                 removeProduct.getName());
 
+        nonPromotionProductByProductName = checkRemoveProductIsExist(removeProduct, nonPromotionProductByProductName);
+
         nonAppliedPromotionCount = updateNonAppliedPromotionCount(orderResult, nonPromotionProductByProductName,
                 nonAppliedPromotionCount);
 
@@ -57,9 +59,20 @@ public class Store {
         orderResult.updateOrderedProducts(promotionProduct, nonAppliedPromotionCount * -1);
     }
 
+    private static Product checkRemoveProductIsExist(Product removeProduct, Product nonPromotionProductByProductName) {
+        if (nonPromotionProductByProductName == null){
+            nonPromotionProductByProductName = removeProduct;
+        }
+        return nonPromotionProductByProductName;
+    }
+
     private int updateNonAppliedPromotionCount(OrderResult orderResult, Product nonPromotionProductByProductName,
                                             int nonAppliedPromotionCount) {
+//        if (!orderResult.getOrderedProducts().containsKey(nonPromotionProductByProductName)){
+//            return 0;
+//        }
         Integer orderQuantity = orderResult.getOrderedProducts().get(nonPromotionProductByProductName);
+
         int min = Math.min(orderQuantity, nonAppliedPromotionCount);
         inventory.returnUnpurchasedPromotionItems(nonPromotionProductByProductName, min);
         orderResult.updateOrderedProducts(nonPromotionProductByProductName, min * -1);
