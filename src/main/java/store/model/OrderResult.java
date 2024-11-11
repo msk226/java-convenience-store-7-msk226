@@ -120,10 +120,10 @@ public class OrderResult {
         Set<Product> products = orderedProducts.keySet();
         for (Product product : products){
             totalDiscountPrice += calculatePromotionBonusQuantity(product) * product.getPrice();
-        }
-
-        if (totalDiscountPrice == calculateDiscountAmount()){
-            return 0;
+            if ((product.hasPromotion() && product.getPromotion().isValidPromotion(orderDate)) && totalDiscountPrice == calculateDiscountAmount()){
+                int discountAmount = product.getPromotion().countEligibleFreeItems(orderedProducts.get(product));
+                return (int) (discountAmount * product.getPrice() * MEMBERSHIP);
+            }
         }
 
         totalNonPromotedPrice = calculateTotalAmount() - calculateDiscountAmount();
