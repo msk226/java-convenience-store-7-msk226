@@ -204,7 +204,7 @@ public class Inventory {
 
     private int calculateApplicablePromotionQuantity(Product product, Integer stockCount, LocalDate orderDate) {
         if (!product.getPromotion().isValidPromotion(orderDate)){
-            return stockCount;
+            return ZERO;
         }
         if (!product.hasPromotion()) {
             return ZERO;

@@ -147,7 +147,8 @@ public class StoreController {
         }
     }
     private boolean promptPromotionAcceptance(Product product, OrderResult orderResult) {
-        if (orderResult.calculatePromotionIsNotApplied(product) == ZERO || storeService.getDiscountAmount(orderResult) == ZERO) {
+        if (!product.getPromotion().isValidPromotion(orderResult.getOrderDate())
+                || orderResult.calculatePromotionIsNotApplied(product) == ZERO || storeService.getDiscountAmount(orderResult) == ZERO) {
             return true;
         }
 
