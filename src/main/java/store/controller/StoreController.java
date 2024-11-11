@@ -73,6 +73,7 @@ public class StoreController {
     private void processOrder(Store store) {
         OutputView.printProducts(store.getProducts());
         OrderResult orderResult = createOrderResult(store);
+        orderResult.initializeOrderResult();
         processDiscounts(store, orderResult);
 
         int membershipDiscount = applyMembershipDiscount(orderResult);
