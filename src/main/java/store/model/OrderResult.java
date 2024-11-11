@@ -6,6 +6,8 @@ import camp.nextstep.edu.missionutils.DateTimes;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,6 +27,16 @@ public class OrderResult {
     }
 
     /* -------------------------------------------------------------------------------------------------------------------*/
+    public void initializeOrderResult() {
+        Set<Product> products = orderedProducts.keySet();
+        Iterator<Product> iterator = products.iterator();
+        while (iterator.hasNext()) {
+            Product product = iterator.next();
+            if (orderedProducts.get(product).equals(ZERO)) {
+                iterator.remove(); // Safely removes the product during iteration
+            }
+        }
+    }
 
     public Map<Product, Integer> updateOrderedProducts(Product product, Integer quantity) {
         Integer existQuantity = orderedProducts.get(product);
@@ -156,6 +168,9 @@ public class OrderResult {
 
 
     public int calculatePromotionIsNotApplied(Product product) {
+        if (!isPromotionApplied()){
+            return 0;
+        }
         Promotion promotion = product.getPromotion();
 
         return getQuantityByProductName(product.getName()) - (calculatePromotionBonusQuantity(product)
