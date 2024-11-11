@@ -44,6 +44,10 @@ public class StoreService {
         store.getFreeItem(orderResult, product, FREE_ITEM);
     }
 
+    public void removeIfNoFreeItem(Product product, Store store, OrderResult orderResult){
+        store.removeIfNoFreeItem(product, orderResult);
+    }
+
     public int getTotalAmount(OrderResult orderResult) {
         Map<Product, Integer> orderedProducts = orderResult.getOrderedProducts();
         Set<Product> products = orderedProducts.keySet();
