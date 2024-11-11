@@ -101,18 +101,24 @@ public class OrderResult {
     }
 
     public int calculateMembershipAmount() {
-        int totalNonPromotedPrice = 0;
-        Set<Product> products = orderedProducts.keySet();
-        for (Product product : products) {
-            if (!product.hasPromotion() && !hasPromotionAppliedForProductName(product.getName())) {
-                totalNonPromotedPrice += product.getPrice() * orderedProducts.get(product);
-            }
-        }
-        int membershipDiscountAmount = (int) (totalNonPromotedPrice * MEMBERSHIP);
-        if (membershipDiscountAmount >= MAX_DISCOUNT_AMOUNT) {
+        Integer membershipDiscountAmount = (int) ((calculateTotalAmount() - calculateDiscountAmount()) * MEMBERSHIP);
+
+        if (membershipDiscountAmount >= MAX_DISCOUNT_AMOUNT){
             return MAX_DISCOUNT_AMOUNT;
         }
         return membershipDiscountAmount;
+//        int totalNonPromotedPrice = 0;
+//        Set<Product> products = orderedProducts.keySet();
+//        for (Product product : products) {
+//            if (!product.hasPromotion() && !hasPromotionAppliedForProductName(product.getName())) {
+//                totalNonPromotedPrice += product.getPrice() * orderedProducts.get(product);
+//            }
+//        }
+//        int membershipDiscountAmount = (int) (totalNonPromotedPrice * MEMBERSHIP);
+//        if (membershipDiscountAmount >= MAX_DISCOUNT_AMOUNT) {
+//            return MAX_DISCOUNT_AMOUNT;
+//        }
+//        return membershipDiscountAmount;
     }
 
     public int calculateFinalAmount(Integer membershipDiscount) {
