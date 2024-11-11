@@ -78,7 +78,9 @@ public class StoreController {
         int membershipDiscount = applyMembershipDiscount(orderResult);
 
         OutputView.printTotalQuantity(orderResult);
-        OutputView.printPromotionQuantity(orderResult);
+        if (storeService.getDiscountAmount(orderResult) != ZERO){
+            OutputView.printPromotionQuantity(orderResult);
+        }
         printAmounts(orderResult, membershipDiscount);
     }
 
