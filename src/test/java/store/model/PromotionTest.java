@@ -2,6 +2,7 @@ package store.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import camp.nextstep.edu.missionutils.DateTimes;
 import camp.nextstep.edu.missionutils.test.NsTest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -50,7 +51,7 @@ public class PromotionTest {
     @Test
     void 프로모션_할인_가격_계산(){
         Promotion promotion = new Promotion(NAME, BUY_AMOUNT, GET_AMOUNT, START_DATE, END_DATE);
-        assertEquals(500_000, promotion.calculateDiscount(1_000, 1_000, LocalDate.now()));
+        assertEquals(500_000, promotion.calculateDiscount(1_000, 1_000, DateTimes.now().toLocalDate()));
     }
 
     @Test

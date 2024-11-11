@@ -92,7 +92,6 @@ public class OutputView {
         System.out.printf(DISCOUNT_AMOUNT, DISCOUNT_AMOUNT_LABEL, getFormattedPriceForDiscount(discountAmount));
         System.out.printf(MEMBERSHIP_AMOUNT, MEMBERSHIP_AMOUNT_LABEL, getFormattedPriceForDiscount(membershipAmount));
         System.out.printf(PAY_AMOUNT, PAY_AMOUNT_LABEL, getFormattedPrice(payAmount));
-        System.out.println(DIVISION);
     }
 
     public static void printProducts(Map<Product, Integer> products) {
