@@ -134,7 +134,7 @@ public class OrderResult {
                                          int totalNonPromotedPrice) {
         if (!alreadyCheckedProductName.contains(product.getName())){
             if (product.hasPromotion()) {
-                totalNonPromotedPrice += calculatePromotionIsNotApplied(product) * product.getPrice();
+                totalNonPromotedPrice += calculatePromotionIsNotAppliedForMembership(product) * product.getPrice();
                 alreadyCheckedProductName.add(product.getName());
                 return totalNonPromotedPrice;
             }
@@ -168,7 +168,19 @@ public class OrderResult {
 
 
     public int calculatePromotionIsNotApplied(Product product) {
-        if (!isPromotionApplied()){
+        Integer stock = orderedProducts.get(product);
+        if (!isPromotionApplied() && product.getPromotion().countPromotionAmount(stock) < 1){
+            return 0;
+        }
+        Promotion promotion = product.getPromotion();
+
+        return getQuantityByProductName(product.getName()) - (calculatePromotionBonusQuantity(product)
+                * (promotion.getBuyAmount() + promotion.getGetAmount()));
+    }
+
+    public int calculatePromotionIsNotAppliedForMembership(Product product) {
+        Integer stock = orderedProducts.get(product);
+        if (!isPromotionApplied() || product.getPromotion().countPromotionAmount(stock) >= 1){
             return 0;
         }
         Promotion promotion = product.getPromotion();
