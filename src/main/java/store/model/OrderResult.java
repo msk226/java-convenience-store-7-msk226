@@ -107,15 +107,8 @@ public class OrderResult {
         Set<Product> products = orderedProducts.keySet();
         List<String> alreadyCheckedProductName = new ArrayList<>();
         for (Product product : products) {
-            if (!alreadyCheckedProductName.contains(product.getName())){
-                if (product.hasPromotion()) {
-                    totalNonPromotedPrice += calculatePromotionIsNotApplied(product) * product.getPrice();
-                    alreadyCheckedProductName.add(product.getName());
-                    continue;
-                }
-                totalNonPromotedPrice += product.getPrice() * orderedProducts.get(product);
-            }
-
+            totalNonPromotedPrice = updateTotalNonPromotedPrice(product, alreadyCheckedProductName, totalNonPromotedPrice);
+            continue;
         }
         int membershipDiscountAmount = (int) (totalNonPromotedPrice * MEMBERSHIP);
 
@@ -123,6 +116,19 @@ public class OrderResult {
             return MAX_DISCOUNT_AMOUNT;
         }
         return membershipDiscountAmount;
+    }
+
+    private int updateTotalNonPromotedPrice(Product product, List<String> alreadyCheckedProductName,
+                                         int totalNonPromotedPrice) {
+        if (!alreadyCheckedProductName.contains(product.getName())){
+            if (product.hasPromotion()) {
+                totalNonPromotedPrice += calculatePromotionIsNotApplied(product) * product.getPrice();
+                alreadyCheckedProductName.add(product.getName());
+                return totalNonPromotedPrice;
+            }
+            totalNonPromotedPrice += product.getPrice() * orderedProducts.get(product);
+        }
+        return totalNonPromotedPrice;
     }
 
     public int calculateFinalAmount(Integer membershipDiscount) {

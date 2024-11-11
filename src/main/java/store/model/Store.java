@@ -46,11 +46,8 @@ public class Store {
         Product nonPromotionProductByProductName = orderResult.findNonPromotionProductByProductName(
                 removeProduct.getName());
 
-        Integer orderQuantity = orderResult.getOrderedProducts().get(nonPromotionProductByProductName);
-        int min = Math.min(orderQuantity, nonAppliedPromotionCount);
-        inventory.returnUnpurchasedPromotionItems(nonPromotionProductByProductName, min);
-        orderResult.updateOrderedProducts(nonPromotionProductByProductName, min * -1);
-        nonAppliedPromotionCount -= orderQuantity;
+        nonAppliedPromotionCount = updateNonAppliedPromotionCount(orderResult, nonPromotionProductByProductName,
+                nonAppliedPromotionCount);
 
         if (nonAppliedPromotionCount <= 0){
             return;
@@ -58,6 +55,16 @@ public class Store {
         Product promotionProduct = orderResult.findPromotionProductByProductName(removeProduct.getName());
         inventory.returnUnpurchasedPromotionItems(promotionProduct, nonAppliedPromotionCount);
         orderResult.updateOrderedProducts(promotionProduct, nonAppliedPromotionCount * -1);
+    }
+
+    private int updateNonAppliedPromotionCount(OrderResult orderResult, Product nonPromotionProductByProductName,
+                                            int nonAppliedPromotionCount) {
+        Integer orderQuantity = orderResult.getOrderedProducts().get(nonPromotionProductByProductName);
+        int min = Math.min(orderQuantity, nonAppliedPromotionCount);
+        inventory.returnUnpurchasedPromotionItems(nonPromotionProductByProductName, min);
+        orderResult.updateOrderedProducts(nonPromotionProductByProductName, min * -1);
+        nonAppliedPromotionCount -= orderQuantity;
+        return nonAppliedPromotionCount;
     }
     /* --------------------------------------------------------------------------------------------*/
 
