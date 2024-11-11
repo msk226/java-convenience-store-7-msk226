@@ -1,5 +1,6 @@
 package store.model;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -161,7 +162,7 @@ public class Inventory {
         Integer stockCount = promotionStock.get(product);
 
         // 프로모션이 적용 가능한 수량을 계산
-        int applicablePromotionQuantity = calculateApplicablePromotionQuantity(product, stockCount);
+        int applicablePromotionQuantity = calculateApplicablePromotionQuantity(product, stockCount, order.getOrderDate());
 
         // 프로모션이 적용 가능한 수량을 처리
         remainingQuantity = processPromotionStock(order, orderResult, product, applicablePromotionQuantity, remainingQuantity);
@@ -201,7 +202,10 @@ public class Inventory {
     }
 
 
-    private int calculateApplicablePromotionQuantity(Product product, Integer stockCount) {
+    private int calculateApplicablePromotionQuantity(Product product, Integer stockCount, LocalDate orderDate) {
+        if (!product.getPromotion().isValidPromotion(orderDate)){
+            return stockCount;
+        }
         if (!product.hasPromotion()) {
             return ZERO;
         }
