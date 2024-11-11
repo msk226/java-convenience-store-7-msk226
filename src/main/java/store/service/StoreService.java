@@ -33,7 +33,7 @@ public class StoreService {
 
         Set<Product> products = orderResult.getOrderedProducts().keySet();
         for (Product product : products) {
-            if (store.checkEligibleFreeItems(product, orderResult.getQuantity(product))) {
+            if (store.checkEligibleFreeItems(product, orderResult.getQuantity(product), orderResult.getOrderDate())) {
                 promotionProduct.add(product);
             }
         }

@@ -53,7 +53,7 @@ public class ProductConverter {
 
     private static void validateProductInput(String[] input) {
         if (input.length != PRODUCT_INPUT_LENGTH) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER_INPUT);
+            throw new IllegalArgumentException(INVALID_INPUT);
         }
     }
 
