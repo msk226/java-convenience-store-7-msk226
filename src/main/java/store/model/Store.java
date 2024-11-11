@@ -58,24 +58,6 @@ public class Store {
         Product promotionProduct = orderResult.findPromotionProductByProductName(removeProduct.getName());
         inventory.returnUnpurchasedPromotionItems(promotionProduct, nonAppliedPromotionCount);
         orderResult.updateOrderedProducts(promotionProduct, nonAppliedPromotionCount * -1);
-
-//
-//        Map<Product, Integer> orderedProducts = orderResult.getOrderedProducts();
-//        Set<Product> products = orderedProducts.keySet();
-//
-//        for (Product product : products){
-//            if (product.getName().equals(removeProduct.getName()) && !product.hasPromotion()){
-//                Integer orderQuantity = orderResult.getOrderedProducts().get(product);
-//                inventory.returnUnpurchasedPromotionItems(removeProduct, Math.min(orderQuantity, nonAppliedPromotionCount));
-//                nonAppliedPromotionCount -= orderQuantity;
-//
-//                if (nonAppliedPromotionCount <= 0) {
-//                    return;
-//                }
-//            }
-//            Product promotionProduct = orderResult.findPromotionProductByProductName(product.getName());
-//            inventory.returnUnpurchasedPromotionItems(promotionProduct, nonAppliedPromotionCount);
-//        }
     }
     /* --------------------------------------------------------------------------------------------*/
 

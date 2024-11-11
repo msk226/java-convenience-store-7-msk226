@@ -4,7 +4,9 @@ import static store.utils.constant.OrderConstant.*;
 
 import camp.nextstep.edu.missionutils.DateTimes;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import store.utils.constant.OrderConstant;
@@ -101,24 +103,25 @@ public class OrderResult {
     }
 
     public int calculateMembershipAmount() {
-        Integer membershipDiscountAmount = (int) ((calculateTotalAmount() - calculateDiscountAmount()) * MEMBERSHIP);
+        int totalNonPromotedPrice = 0;
+        Set<Product> products = orderedProducts.keySet();
+        List<String> alreadyCheckedProductName = new ArrayList<>();
+        for (Product product : products) {
+            if (!alreadyCheckedProductName.contains(product.getName())){
+                if (product.hasPromotion()) {
+                    totalNonPromotedPrice += calculatePromotionIsNotApplied(product) * product.getPrice();
+                    alreadyCheckedProductName.add(product.getName());
+                    continue;
+                }
+                totalNonPromotedPrice += product.getPrice() * orderedProducts.get(product);
+            }
 
-        if (membershipDiscountAmount >= MAX_DISCOUNT_AMOUNT){
+        }
+        int membershipDiscountAmount = (int) (totalNonPromotedPrice * MEMBERSHIP);
+        if (membershipDiscountAmount >= MAX_DISCOUNT_AMOUNT) {
             return MAX_DISCOUNT_AMOUNT;
         }
         return membershipDiscountAmount;
-//        int totalNonPromotedPrice = 0;
-//        Set<Product> products = orderedProducts.keySet();
-//        for (Product product : products) {
-//            if (!product.hasPromotion() && !hasPromotionAppliedForProductName(product.getName())) {
-//                totalNonPromotedPrice += product.getPrice() * orderedProducts.get(product);
-//            }
-//        }
-//        int membershipDiscountAmount = (int) (totalNonPromotedPrice * MEMBERSHIP);
-//        if (membershipDiscountAmount >= MAX_DISCOUNT_AMOUNT) {
-//            return MAX_DISCOUNT_AMOUNT;
-//        }
-//        return membershipDiscountAmount;
     }
 
     public int calculateFinalAmount(Integer membershipDiscount) {
