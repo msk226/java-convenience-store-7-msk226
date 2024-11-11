@@ -33,7 +33,7 @@ public class OrderConverter {
         String[] split = extractProductAndQuantity(order);
 
         if (split.length != 2) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_INPUT);
+            throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER_INPUT);
         }
 
         String productName = split[0];
@@ -53,7 +53,7 @@ public class OrderConverter {
         try {
             return Integer.parseInt(quantityString);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_INPUT);
+            throw new IllegalArgumentException(ErrorMessage.INVALID_ORDER_INPUT);
         }
     }
 
