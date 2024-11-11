@@ -29,8 +29,8 @@ public class Store {
         return new OrderResult(inventory.retrieveProductForOrder(orders));
     }
 
-    public boolean checkEligibleFreeItems(Product product, Integer quantity) {
-        if (!product.hasPromotion() || !inventory.isEligibleFreeItems(product, quantity)) {
+    public boolean checkEligibleFreeItems(Product product, Integer quantity, LocalDate localDate) {
+        if (!product.hasPromotion() || !inventory.isEligibleFreeItems(product, quantity) || !product.getPromotion().isValidPromotion(localDate)) {
             return false;
         }
         return product.getPromotion().checkEligibleFreeItems(quantity);

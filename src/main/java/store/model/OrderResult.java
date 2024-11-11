@@ -47,7 +47,7 @@ public class OrderResult {
     public boolean isPromotionApplied(){
         Set<Product> products = orderedProducts.keySet();
         for (Product product : products){
-            if (product.hasPromotion()){
+            if (product.hasPromotion() && product.getPromotion().isValidPromotion(orderDate)){
                 return true;
             }
         }
@@ -133,7 +133,7 @@ public class OrderResult {
     private int updateTotalNonPromotedPrice(Product product, List<String> alreadyCheckedProductName,
                                          int totalNonPromotedPrice) {
         if (!alreadyCheckedProductName.contains(product.getName())){
-            if (product.hasPromotion()) {
+            if (product.hasPromotion() && product.getPromotion().isValidPromotion(orderDate)) {
                 totalNonPromotedPrice += calculatePromotionIsNotAppliedForMembership(product) * product.getPrice();
                 alreadyCheckedProductName.add(product.getName());
                 return totalNonPromotedPrice;

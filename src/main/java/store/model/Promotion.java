@@ -52,6 +52,10 @@ public class Promotion {
         return discountQuantity * unitPrice;
     }
 
+    public boolean isValidPromotion(LocalDate orderDate){
+        return !(orderDate.isBefore(startDate) || orderDate.isAfter(endDate));
+    }
+
 
     /* -------------------------------------------------------------------------------------------------------------------*/
 
