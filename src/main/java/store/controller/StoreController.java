@@ -7,6 +7,7 @@ import static store.utils.message.InputMessage.*;
 import static store.utils.message.OutputMessage.DIVISION;
 import static store.utils.message.OutputMessage.WELCOME_MESSAGE;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +92,7 @@ public class StoreController {
 
     private void processDiscounts(Store store, OrderResult orderResult) {
         handleFreeItems(store, orderResult);
-        checkNonAppliedPromotions(orderResult);
+        checkNonAppliedPromotions(store, orderResult);
 
     }
 
@@ -114,30 +115,39 @@ public class StoreController {
             storeService.getFreeItem(product, store, orderResult);
             return true;
         }
+        //storeService.removeIfNoFreeItem(product, orderResult);
         return false;
     }
 
-    private void checkNonAppliedPromotions(OrderResult orderResult) {
+    private void checkNonAppliedPromotions(Store store, OrderResult orderResult) {
         Set<Product> products = orderResult.getOrderedProducts().keySet();
+        List<Product> productsToRemove = new ArrayList<>(); // 삭제할 항목을 위한 리스트
+
         for (Product product : products) {
             if (product.hasPromotion() && orderResult.hasPromotionAppliedForProductName(product.getName())) {
-                promptPromotionAcceptance(product, orderResult);
+                if (!promptPromotionAcceptance(product, orderResult)) {
+                    productsToRemove.add(product); // 삭제할 항목을 임시 저장
+                }
             }
+        }
+
+        // 반복이 끝난 후 삭제 메서드 호출
+        for (Product product : productsToRemove) {
+            storeService.removeIfNoFreeItem(product, store, orderResult);
         }
     }
 
-    private void promptPromotionAcceptance(Product product, OrderResult orderResult) {
-
+    private boolean promptPromotionAcceptance(Product product, OrderResult orderResult) {
         if (orderResult.calculatePromotionIsNotApplied(product) == ZERO) {
-            return;
+            return true; // 삭제 필요 없음
         }
 
         String input = InputView.input(String.format(PROMOTION_IS_NOT_APPLY, product.getName(),
                 orderResult.calculatePromotionIsNotApplied(product)));
-        if (!input.equals(YES)) {
-            throw new IllegalArgumentException(STOP_SHOPPING);
-        }
+        return input.equals(YES);
     }
+
+
 
     private int applyMembershipDiscount(OrderResult orderResult) {
         if (isMembershipDiscountApplied()) {
