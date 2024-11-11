@@ -37,17 +37,13 @@ public class StoreController {
         while (true) {
             try {
                 processOrder(store);
-                if (!retry()) {
+                if (!retryInputWithException(RETRY_MESSAGE)) {
                     break;
                 }
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
         }
-    }
-
-    private boolean retry() {
-        return InputView.input(RETRY_MESSAGE).equalsIgnoreCase(YES);
     }
 
     private boolean retryInputWithException(String message) {
