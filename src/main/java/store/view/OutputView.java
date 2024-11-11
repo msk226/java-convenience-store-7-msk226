@@ -79,7 +79,7 @@ public class OutputView {
         Map<Product, Integer> orderedProducts = orderResult.getOrderedProducts();
         Set<Product> products = orderedProducts.keySet();
         for (Product product : products) {
-            if (product.hasPromotion() || product.getPromotion().isValidPromotion(orderResult.getOrderDate())) {
+            if (product.hasPromotion() && product.getPromotion().isValidPromotion(orderResult.getOrderDate())) {
                 System.out.printf(PROMOTION, product.getName(), orderResult.calculatePromotionBonusQuantity(product));
             }
         }

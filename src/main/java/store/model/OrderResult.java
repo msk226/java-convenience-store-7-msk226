@@ -116,12 +116,14 @@ public class OrderResult {
 
     public int calculateMembershipAmount() {
         int totalNonPromotedPrice = 0;
-        Set<Product> products = orderedProducts.keySet();
-        List<String> alreadyCheckedProductName = new ArrayList<>();
-        for (Product product : products) {
-            totalNonPromotedPrice = updateTotalNonPromotedPrice(product, alreadyCheckedProductName, totalNonPromotedPrice);
-            continue;
-        }
+//        Set<Product> products = orderedProducts.keySet();
+//        List<String> alreadyCheckedProductName = new ArrayList<>();
+//        for (Product product : products) {
+//            totalNonPromotedPrice = updateTotalNonPromotedPrice(product, alreadyCheckedProductName, totalNonPromotedPrice);
+//            continue;
+//        }
+
+        totalNonPromotedPrice = calculateTotalAmount() - calculateDiscountAmount();
         int membershipDiscountAmount = (int) (totalNonPromotedPrice * MEMBERSHIP);
 
         if (membershipDiscountAmount >= MAX_DISCOUNT_AMOUNT) {
