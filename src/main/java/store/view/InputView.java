@@ -1,5 +1,6 @@
 package store.view;
 
+
 import camp.nextstep.edu.missionutils.Console;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -10,8 +11,15 @@ import java.util.List;
 public class InputView {
 
     public static String input(String message) {
-        System.out.println(message);
-        return Console.readLine();
+        while (true){
+            try {
+                System.out.println(message);
+                return Console.readLine();
+            } catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            }
+        }
+
     }
 
     public static List<String> inputData(String filePath) {
