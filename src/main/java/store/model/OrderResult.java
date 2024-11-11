@@ -115,13 +115,16 @@ public class OrderResult {
     }
 
     public int calculateMembershipAmount() {
-        int totalNonPromotedPrice = 0;
-//        Set<Product> products = orderedProducts.keySet();
-//        List<String> alreadyCheckedProductName = new ArrayList<>();
-//        for (Product product : products) {
-//            totalNonPromotedPrice = updateTotalNonPromotedPrice(product, alreadyCheckedProductName, totalNonPromotedPrice);
-//            continue;
-//        }
+        int totalNonPromotedPrice;
+        int totalDiscountPrice = 0;
+        Set<Product> products = orderedProducts.keySet();
+        for (Product product : products){
+            totalDiscountPrice += calculatePromotionBonusQuantity(product) * product.getPrice();
+        }
+
+        if (totalDiscountPrice == calculateDiscountAmount()){
+            return 0;
+        }
 
         totalNonPromotedPrice = calculateTotalAmount() - calculateDiscountAmount();
         int membershipDiscountAmount = (int) (totalNonPromotedPrice * MEMBERSHIP);
